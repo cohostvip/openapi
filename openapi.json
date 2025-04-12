@@ -1,0 +1,1105 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cohost API Schema",
+    "version": "1.0.0-beta.1"
+  },
+  "components": {
+    "schemas": {
+      "MultipartText": {
+        "type": "object",
+        "properties": {
+          "html": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "md": {
+            "type": "string"
+          },
+          "blocks": {
+            "type": "array",
+            "items": {}
+          }
+        }
+      },
+      "Photo": {
+        "type": "object",
+        "properties": {
+          "2x": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "caption": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "Schedule": {
+        "type": "object",
+        "properties": {
+          "daysOfWeek": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "excludeDates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "includeDates": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ]
+      },
+      "DataRecord": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string"
+          },
+          "changed": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "created"
+        ]
+      },
+      "CurrencyAmount": {
+        "type": "string",
+        "pattern": "^\\w{3},\\d+$"
+      },
+      "CostBase": {
+        "type": "object",
+        "properties": {
+          "cost": {
+            "$ref": "#/components/schemas/CurrencyAmount"
+          },
+          "delivery": {
+            "$ref": "#/components/schemas/CurrencyAmount"
+          },
+          "fee": {
+            "$ref": "#/components/schemas/CurrencyAmount"
+          },
+          "tax": {
+            "$ref": "#/components/schemas/CurrencyAmount"
+          }
+        },
+        "required": [
+          "cost",
+          "delivery",
+          "fee",
+          "tax"
+        ]
+      },
+      "CostComponentCap": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "enum": [
+              "cap"
+            ]
+          },
+          "type": {
+            "enum": [
+              "percentage",
+              "absolute"
+            ]
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "op",
+          "type",
+          "value"
+        ]
+      },
+      "CostOp": {
+        "type": "object",
+        "properties": {
+          "op": {
+            "enum": [
+              "+",
+              "-",
+              "*",
+              "/"
+            ]
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "op",
+          "value"
+        ]
+      },
+      "EqualOperator": {
+        "type": "string",
+        "enum": [
+          "==",
+          "!=",
+          "<",
+          "<=",
+          ">",
+          ">="
+        ]
+      },
+      "CostComponentRuleCondition": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "operator": {
+            "$ref": "#/components/schemas/EqualOperator"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {}
+            ]
+          },
+          "eval": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "field",
+          "operator",
+          "value"
+        ]
+      },
+      "CostComponentRule": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "conditions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostComponentRuleCondition"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "conditions"
+        ]
+      },
+      "CostBucket": {
+        "type": "string",
+        "enum": [
+          "item",
+          "fee",
+          "tax",
+          "delivery"
+        ]
+      },
+      "CostComponent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "details": {},
+          "currency": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "*"
+                ]
+              }
+            ]
+          },
+          "base": {
+            "type": "string"
+          },
+          "bucket": {
+            "$ref": "#/components/schemas/CostBucket"
+          },
+          "recipient": {
+            "type": "string"
+          },
+          "payer": {
+            "enum": [
+              "attendee",
+              "organizer"
+            ]
+          },
+          "ops": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostOp"
+            }
+          },
+          "cap": {
+            "$ref": "#/components/schemas/CostComponentCap"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostComponentRule"
+            }
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "currency",
+          "base",
+          "bucket",
+          "recipient",
+          "payer",
+          "ops",
+          "rules",
+          "version"
+        ]
+      },
+      "OfferingType": {
+        "type": "string",
+        "enum": [
+          "admission",
+          "package",
+          "skip",
+          "drink",
+          "ticket",
+          "merch",
+          "donation",
+          "membership",
+          "voucher",
+          "service",
+          "other"
+        ]
+      },
+      "ActiveOfferingStatus": {
+        "type": "string",
+        "enum": [
+          "live",
+          "hidden",
+          "sold-out"
+        ]
+      },
+      "OfferingStatus": {
+        "type": "string",
+        "enum": [
+          "live",
+          "hidden",
+          "sold-out",
+          "draft",
+          "deleted",
+          "unavailable"
+        ]
+      },
+      "PriceCategory": {
+        "type": "string",
+        "enum": [
+          "donation",
+          "free",
+          "paid",
+          "other"
+        ]
+      },
+      "OfferingCosts": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CostBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "gross": {
+                "$ref": "#/components/schemas/CurrencyAmount"
+              },
+              "total": {
+                "$ref": "#/components/schemas/CurrencyAmount"
+              }
+            },
+            "required": [
+              "gross",
+              "total"
+            ]
+          }
+        ]
+      },
+      "PackageInclude": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OfferingType"
+          },
+          "description": {
+            "type": "string"
+          },
+          "ref": {}
+        },
+        "required": [
+          "id",
+          "quantity",
+          "type",
+          "description"
+        ]
+      },
+      "Offering": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DataRecord"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "parentPath": {
+                "type": "string"
+              },
+              "type": {
+                "$ref": "#/components/schemas/OfferingType"
+              },
+              "capacity": {
+                "type": "number"
+              },
+              "quantitySold": {
+                "type": "number"
+              },
+              "hidden": {
+                "type": "boolean"
+              },
+              "status": {
+                "$ref": "#/components/schemas/OfferingStatus"
+              },
+              "priceCategory": {
+                "$ref": "#/components/schemas/PriceCategory"
+              },
+              "sorting": {
+                "type": "number"
+              },
+              "schedule": {
+                "$ref": "#/components/schemas/Schedule"
+              },
+              "description": {
+                "type": "string"
+              },
+              "instructions": {
+                "type": "string"
+              },
+              "maximumQuantity": {
+                "type": "number"
+              },
+              "minimumQuantity": {
+                "type": "number"
+              },
+              "package": {
+                "type": "boolean"
+              },
+              "included": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PackageInclude"
+                }
+              },
+              "constraints": {},
+              "order_confirmation_message": {
+                "type": "string"
+              },
+              "costs": {
+                "$ref": "#/components/schemas/OfferingCosts"
+              },
+              "costComponents": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CostComponent"
+                }
+              }
+            },
+            "required": [
+              "name",
+              "parentPath",
+              "type",
+              "capacity",
+              "quantitySold",
+              "hidden",
+              "status",
+              "priceCategory",
+              "sorting",
+              "maximumQuantity",
+              "minimumQuantity",
+              "constraints",
+              "costs"
+            ]
+          }
+        ]
+      },
+      "Ticket": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "admission",
+                  "package"
+                ]
+              },
+              "source": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "ticketParentId": {
+                "type": "string"
+              },
+              "salesEnd": {
+                "type": "string"
+              },
+              "salesStart": {
+                "type": "string"
+              },
+              "parentId": {
+                "type": "string"
+              },
+              "refId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "category",
+              "type",
+              "source",
+              "salesEnd",
+              "salesStart"
+            ]
+          }
+        ]
+      },
+      "BuzzBuilder": {
+        "type": "object",
+        "properties": {
+          "countLabel": {
+            "type": "string"
+          },
+          "profiles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "photoURL": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "photoURL"
+              ]
+            }
+          }
+        },
+        "required": [
+          "countLabel",
+          "profiles"
+        ]
+      },
+      "EventFeature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "order": {
+            "type": "number"
+          },
+          "widgetUri": {
+            "type": "string"
+          },
+          "iconName": {
+            "type": "string"
+          },
+          "logoUri": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "meta": {},
+          "data": {}
+        },
+        "required": [
+          "id",
+          "title",
+          "enabled",
+          "order",
+          "widgetUri",
+          "description",
+          "type",
+          "key",
+          "data"
+        ]
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "address_1": {
+            "type": "string"
+          },
+          "address_2": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          },
+          "premise": {
+            "type": "string"
+          },
+          "formattedAddress": {
+            "type": "string"
+          },
+          "localized_address_display": {
+            "type": "string"
+          },
+          "localized_area_display": {
+            "type": "string"
+          },
+          "localized_multi_line_address_display": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "postal_code": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address_1",
+          "city",
+          "country",
+          "postal_code",
+          "region"
+        ]
+      },
+      "GeometryPoint": {
+        "type": "object",
+        "properties": {
+          "lat": {
+            "type": "number"
+          },
+          "lng": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "lat",
+          "lng"
+        ]
+      },
+      "LocationGeometry": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/GeometryPoint"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "zoom": {
+                "type": "number"
+              },
+              "viewport": {
+                "type": "object",
+                "properties": {
+                  "northeast": {
+                    "$ref": "#/components/schemas/GeometryPoint"
+                  },
+                  "southwest": {
+                    "$ref": "#/components/schemas/GeometryPoint"
+                  }
+                }
+              },
+              "vicinity": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string"
+              },
+              "locality": {
+                "type": "string"
+              },
+              "geoHash": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Location": {
+        "type": "object",
+        "properties": {
+          "venueId": {
+            "type": "string"
+          },
+          "placeId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "geometry": {
+            "$ref": "#/components/schemas/LocationGeometry"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "timezone": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "VenueBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "formattedAddress": {
+            "type": "string"
+          },
+          "placeId": {
+            "type": "string"
+          },
+          "tz": {
+            "type": "string"
+          },
+          "logo": {
+            "$ref": "#/components/schemas/Photo"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "formattedAddress",
+          "tz",
+          "public"
+        ]
+      },
+      "EventStatus": {
+        "type": "string",
+        "enum": [
+          "archived",
+          "draft",
+          "live",
+          "started",
+          "ended",
+          "completed",
+          "canceled"
+        ]
+      },
+      "EventBase": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "companyId": {
+            "type": "string"
+          },
+          "tz": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "isSeries": {
+            "type": "boolean"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EventStatus"
+          },
+          "flyer": {
+            "$ref": "#/components/schemas/Photo"
+          },
+          "venue": {
+            "$ref": "#/components/schemas/VenueBase"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "summary",
+          "companyId",
+          "tz",
+          "start",
+          "end",
+          "status",
+          "currency",
+          "public"
+        ]
+      },
+      "EventProfile": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EventBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "meta": {},
+              "organizer": {},
+              "url": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              },
+              "channels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "description": {
+                "$ref": "#/components/schemas/MultipartText"
+              },
+              "widgets": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EventFeature"
+                }
+              },
+              "ticketPrices": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "buzzBuilder": {
+                "$ref": "#/components/schemas/BuzzBuilder"
+              },
+              "venue": {
+                "$ref": "#/components/schemas/VenueBase"
+              },
+              "tags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "searchTags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "sections": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "priceRange": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "string"
+                  },
+                  "max": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "required": [
+              "slug",
+              "channels",
+              "description",
+              "widgets",
+              "ticketPrices",
+              "tags",
+              "searchTags",
+              "sections"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/events/{id}": {
+      "get": {
+        "summary": "Get event profile",
+        "operationId": "getEvent",
+        "tags": [
+          "Events"
+        ],
+        "x-google-backend": {
+          "address": "https://${region}-${project}.cloudfunctions.net/eventsRestful"
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the event"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ok"
+                      ]
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/EventProfile"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/events/{id}/tickets": {
+      "get": {
+        "summary": "Get event tickets",
+        "operationId": "getEventTickets",
+        "tags": [
+          "Events"
+        ],
+        "x-google-backend": {
+          "address": "https://${region}-${project}.cloudfunctions.net/eventsRestful"
+        },
+        "description": "Retrieve a list of tickets for a specific event.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The ID of the event"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
+            },
+            "description": "Filter tickets by status (e.g., \"live\", \"draft\", etc.)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of tickets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ok"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Ticket"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
