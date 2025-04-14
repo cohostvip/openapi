@@ -122,21 +122,25 @@
         "additionalProperties": false,
         "properties": {
           "cost": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "cost",
             "type": "string"
           },
           "delivery": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "delivery",
             "type": "string"
           },
           "fee": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "fee",
             "type": "string"
           },
           "tax": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "tax",
             "type": "string"
@@ -172,34 +176,7 @@
             "$ref": "#/components/schemas/CostBucket"
           },
           "cap": {
-            "additionalProperties": false,
-            "properties": {
-              "op": {
-                "const": "cap",
-                "title": "op",
-                "type": "string"
-              },
-              "type": {
-                "enum": [
-                  "absolute",
-                  "percentage"
-                ],
-                "title": "type",
-                "type": "string"
-              },
-              "value": {
-                "description": "The value of the cap. If type is percentage, it is a percentage of the base value.\nIf type is absolute, it is an absolute value.\n\nAbsolute value is represented in the same denomination as the cost.\ni.e. if the cost is in cents, the absolute value should be in cents.\n\npercentage value is represented as a decimal.\nFor example, 10% is represented as 0.1.",
-                "title": "value",
-                "type": "number"
-              }
-            },
-            "required": [
-              "op",
-              "type",
-              "value"
-            ],
-            "title": "cap",
-            "type": "object"
+            "$ref": "#/components/schemas/CostComponentCap"
           },
           "currency": {
             "title": "currency",
@@ -218,29 +195,7 @@
           },
           "ops": {
             "items": {
-              "additionalProperties": false,
-              "properties": {
-                "op": {
-                  "enum": [
-                    "*",
-                    "+",
-                    "-",
-                    "/"
-                  ],
-                  "title": "op",
-                  "type": "string"
-                },
-                "value": {
-                  "description": "Absolute values should match the denominator, and denomination of the cost.\nso if the amount in USD is in cents, the value should be in cents.",
-                  "title": "value",
-                  "type": "number"
-                }
-              },
-              "required": [
-                "op",
-                "value"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/CostOp"
             },
             "title": "ops",
             "type": "array"
@@ -259,52 +214,7 @@
           },
           "rules": {
             "items": {
-              "additionalProperties": false,
-              "properties": {
-                "conditions": {
-                  "description": "The rule will be applied to the cost component if the conditions are met.",
-                  "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "eval": {
-                        "description": "evaluator, will define a function or endpoint to evaluate the condition.",
-                        "title": "eval",
-                        "type": "string"
-                      },
-                      "field": {
-                        "description": "The field to evaluate the condition against.\nFor example, \"item.price\" or \"order.total\".\nThe field should be a valid path to the field in the cost component base.",
-                        "title": "field",
-                        "type": "string"
-                      },
-                      "operator": {
-                        "$ref": "#/components/schemas/EqualOperator"
-                      },
-                      "value": {
-                        "description": "Can be a value such as number, currencyAmount, an ISO date string, etc...",
-                        "title": "value"
-                      }
-                    },
-                    "required": [
-                      "field",
-                      "operator",
-                      "value"
-                    ],
-                    "type": "object"
-                  },
-                  "title": "conditions",
-                  "type": "array"
-                },
-                "name": {
-                  "description": "Friendly name of the rule.",
-                  "title": "name",
-                  "type": "string"
-                }
-              },
-              "required": [
-                "conditions",
-                "name"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/CostComponentRule"
             },
             "title": "rules",
             "type": "array"
@@ -356,6 +266,7 @@
           "type",
           "value"
         ],
+        "title": "CostComponentCap",
         "type": "object"
       },
       "CostComponentRule": {
@@ -364,32 +275,7 @@
           "conditions": {
             "description": "The rule will be applied to the cost component if the conditions are met.",
             "items": {
-              "additionalProperties": false,
-              "properties": {
-                "eval": {
-                  "description": "evaluator, will define a function or endpoint to evaluate the condition.",
-                  "title": "eval",
-                  "type": "string"
-                },
-                "field": {
-                  "description": "The field to evaluate the condition against.\nFor example, \"item.price\" or \"order.total\".\nThe field should be a valid path to the field in the cost component base.",
-                  "title": "field",
-                  "type": "string"
-                },
-                "operator": {
-                  "$ref": "#/components/schemas/EqualOperator"
-                },
-                "value": {
-                  "description": "Can be a value such as number, currencyAmount, an ISO date string, etc...",
-                  "title": "value"
-                }
-              },
-              "required": [
-                "field",
-                "operator",
-                "value"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/CostComponentRuleCondition"
             },
             "title": "conditions",
             "type": "array"
@@ -404,6 +290,7 @@
           "conditions",
           "name"
         ],
+        "title": "CostComponentRule",
         "type": "object"
       },
       "CostComponentRuleCondition": {
@@ -432,6 +319,7 @@
           "operator",
           "value"
         ],
+        "title": "CostComponentRuleCondition",
         "type": "object"
       },
       "CostOp": {
@@ -457,9 +345,11 @@
           "op",
           "value"
         ],
+        "title": "CostOp",
         "type": "object"
       },
       "CurrencyAmount": {
+        "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
         "pattern": "^\\\\w{3},\\\\d+$",
         "type": "string"
       },
@@ -506,10 +396,12 @@
             "type": "string"
           },
           "currency": {
+            "description": "Curerncy used for the event.",
             "title": "currency",
             "type": "string"
           },
           "end": {
+            "description": "The end date and time of the event in ISO 8601 format.",
             "title": "end",
             "type": "string"
           },
@@ -532,10 +424,12 @@
             "type": "string"
           },
           "public": {
+            "description": "Is the event public?",
             "title": "public",
             "type": "boolean"
           },
           "start": {
+            "description": "The start date and time of the event in ISO 8601 format.",
             "title": "start",
             "type": "string"
           },
@@ -547,6 +441,7 @@
             "type": "string"
           },
           "tz": {
+            "description": "The timezone in which the event is taking place.",
             "title": "tz",
             "type": "string"
           },
@@ -656,6 +551,7 @@
             "type": "string"
           },
           "currency": {
+            "description": "Curerncy used for the event.",
             "title": "currency",
             "type": "string"
           },
@@ -663,6 +559,7 @@
             "$ref": "#/components/schemas/MultipartText"
           },
           "end": {
+            "description": "The end date and time of the event in ISO 8601 format.",
             "title": "end",
             "type": "string"
           },
@@ -706,6 +603,7 @@
             "type": "object"
           },
           "public": {
+            "description": "Is the event public?",
             "title": "public",
             "type": "boolean"
           },
@@ -728,6 +626,7 @@
             "type": "string"
           },
           "start": {
+            "description": "The start date and time of the event in ISO 8601 format.",
             "title": "start",
             "type": "string"
           },
@@ -753,6 +652,7 @@
             "type": "array"
           },
           "tz": {
+            "description": "The timezone in which the event is taking place.",
             "title": "tz",
             "type": "string"
           },
@@ -790,7 +690,6 @@
           "tags",
           "ticketPrices",
           "tz",
-          "venue",
           "widgets"
         ],
         "title": "EventProfile",
@@ -839,22 +738,18 @@
             "$ref": "#/components/schemas/LocationGeometry"
           },
           "name": {
-            "description": "The name of the location.\nCould be the name of the venue, or a custom name.",
             "title": "name",
             "type": "string"
           },
           "placeId": {
-            "description": "Google place id associated with this location.",
             "title": "placeId",
             "type": "string"
           },
           "timezone": {
-            "description": "The timezone in IANA Time Zone format (e.g., 'America/Los_Angeles', 'Europe/Berlin').\nSee: https://www.iana.org/time-zones",
             "title": "timezone",
             "type": "string"
           },
           "venueId": {
-            "description": "Venue id associated with this location.",
             "title": "venueId",
             "type": "string"
           }
@@ -1079,16 +974,19 @@
         "description": "Represents the costs associated with an offering.",
         "properties": {
           "cost": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "cost",
             "type": "string"
           },
           "delivery": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "delivery",
             "type": "string"
           },
           "fee": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "fee",
             "type": "string"
@@ -1100,6 +998,7 @@
             "type": "string"
           },
           "tax": {
+            "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
             "pattern": "^\\\\w{3},\\\\d+$",
             "title": "tax",
             "type": "string"
@@ -1145,6 +1044,7 @@
           "package",
           "service",
           "skip",
+          "tc-ticket",
           "ticket",
           "voucher"
         ],
@@ -1207,7 +1107,7 @@
             "type": "string"
           },
           "url": {
-            "description": "Primary image URL.",
+            "description": "Primary image URL.\nThis is the default image URL to be used when no other resolution is specified.",
             "title": "url",
             "type": "string"
           },

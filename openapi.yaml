@@ -92,18 +92,62 @@ components:
       additionalProperties: false
       properties:
         cost:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: cost
           type: string
         delivery:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: delivery
           type: string
         fee:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: fee
           type: string
         tax:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: tax
           type: string
@@ -131,44 +175,7 @@ components:
         bucket:
           $ref: '#/components/schemas/CostBucket'
         cap:
-          additionalProperties: false
-          properties:
-            op:
-              const: cap
-              title: op
-              type: string
-            type:
-              enum:
-                - absolute
-                - percentage
-              title: type
-              type: string
-            value:
-              description: >-
-                The value of the cap. If type is percentage, it is a percentage
-                of the base value.
-
-                If type is absolute, it is an absolute value.
-
-
-                Absolute value is represented in the same denomination as the
-                cost.
-
-                i.e. if the cost is in cents, the absolute value should be in
-                cents.
-
-
-                percentage value is represented as a decimal.
-
-                For example, 10% is represented as 0.1.
-              title: value
-              type: number
-          required:
-            - op
-            - type
-            - value
-          title: cap
-          type: object
+          $ref: '#/components/schemas/CostComponentCap'
         currency:
           title: currency
           type: string
@@ -182,29 +189,7 @@ components:
           type: string
         ops:
           items:
-            additionalProperties: false
-            properties:
-              op:
-                enum:
-                  - '*'
-                  - +
-                  - '-'
-                  - /
-                title: op
-                type: string
-              value:
-                description: >-
-                  Absolute values should match the denominator, and denomination
-                  of the cost.
-
-                  so if the amount in USD is in cents, the value should be in
-                  cents.
-                title: value
-                type: number
-            required:
-              - op
-              - value
-            type: object
+            $ref: '#/components/schemas/CostOp'
           title: ops
           type: array
         payer:
@@ -218,53 +203,7 @@ components:
           type: string
         rules:
           items:
-            additionalProperties: false
-            properties:
-              conditions:
-                description: >-
-                  The rule will be applied to the cost component if the
-                  conditions are met.
-                items:
-                  additionalProperties: false
-                  properties:
-                    eval:
-                      description: >-
-                        evaluator, will define a function or endpoint to
-                        evaluate the condition.
-                      title: eval
-                      type: string
-                    field:
-                      description: >-
-                        The field to evaluate the condition against.
-
-                        For example, "item.price" or "order.total".
-
-                        The field should be a valid path to the field in the
-                        cost component base.
-                      title: field
-                      type: string
-                    operator:
-                      $ref: '#/components/schemas/EqualOperator'
-                    value:
-                      description: >-
-                        Can be a value such as number, currencyAmount, an ISO
-                        date string, etc...
-                      title: value
-                  required:
-                    - field
-                    - operator
-                    - value
-                  type: object
-                title: conditions
-                type: array
-              name:
-                description: Friendly name of the rule.
-                title: name
-                type: string
-            required:
-              - conditions
-              - name
-            type: object
+            $ref: '#/components/schemas/CostComponentRule'
           title: rules
           type: array
         version:
@@ -318,6 +257,7 @@ components:
         - op
         - type
         - value
+      title: CostComponentCap
       type: object
     CostComponentRule:
       additionalProperties: false
@@ -327,36 +267,7 @@ components:
             The rule will be applied to the cost component if the conditions are
             met.
           items:
-            additionalProperties: false
-            properties:
-              eval:
-                description: >-
-                  evaluator, will define a function or endpoint to evaluate the
-                  condition.
-                title: eval
-                type: string
-              field:
-                description: >-
-                  The field to evaluate the condition against.
-
-                  For example, "item.price" or "order.total".
-
-                  The field should be a valid path to the field in the cost
-                  component base.
-                title: field
-                type: string
-              operator:
-                $ref: '#/components/schemas/EqualOperator'
-              value:
-                description: >-
-                  Can be a value such as number, currencyAmount, an ISO date
-                  string, etc...
-                title: value
-            required:
-              - field
-              - operator
-              - value
-            type: object
+            $ref: '#/components/schemas/CostComponentRuleCondition'
           title: conditions
           type: array
         name:
@@ -366,6 +277,7 @@ components:
       required:
         - conditions
         - name
+      title: CostComponentRule
       type: object
     CostComponentRuleCondition:
       additionalProperties: false
@@ -397,6 +309,7 @@ components:
         - field
         - operator
         - value
+      title: CostComponentRuleCondition
       type: object
     CostOp:
       additionalProperties: false
@@ -420,8 +333,20 @@ components:
       required:
         - op
         - value
+      title: CostOp
       type: object
     CurrencyAmount:
+      description: >-
+        A string representing a currency amount in the format `"USD,1000"`
+        where:
+
+        - `"USD"` is the 3-letter ISO currency code.
+
+        - The number after the comma represents the value in **minor units**
+        (e.g., cents for USD).
+
+
+        For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
       pattern: ^\\w{3},\\d+$
       type: string
     DataRecord:
@@ -458,9 +383,11 @@ components:
           title: companyId
           type: string
         currency:
+          description: Curerncy used for the event.
           title: currency
           type: string
         end:
+          description: The end date and time of the event in ISO 8601 format.
           title: end
           type: string
         flyer:
@@ -477,9 +404,11 @@ components:
           title: name
           type: string
         public:
+          description: Is the event public?
           title: public
           type: boolean
         start:
+          description: The start date and time of the event in ISO 8601 format.
           title: start
           type: string
         status:
@@ -488,6 +417,7 @@ components:
           title: summary
           type: string
         tz:
+          description: The timezone in which the event is taking place.
           title: tz
           type: string
         venue:
@@ -572,11 +502,13 @@ components:
           title: companyId
           type: string
         currency:
+          description: Curerncy used for the event.
           title: currency
           type: string
         description:
           $ref: '#/components/schemas/MultipartText'
         end:
+          description: The end date and time of the event in ISO 8601 format.
           title: end
           type: string
         flyer:
@@ -608,6 +540,7 @@ components:
           title: priceRange
           type: object
         public:
+          description: Is the event public?
           title: public
           type: boolean
         searchTags:
@@ -624,6 +557,7 @@ components:
           title: slug
           type: string
         start:
+          description: The start date and time of the event in ISO 8601 format.
           title: start
           type: string
         status:
@@ -642,6 +576,7 @@ components:
           title: ticketPrices
           type: array
         tz:
+          description: The timezone in which the event is taking place.
           title: tz
           type: string
         url:
@@ -673,7 +608,6 @@ components:
         - tags
         - ticketPrices
         - tz
-        - venue
         - widgets
       title: EventProfile
       type: object
@@ -728,25 +662,15 @@ components:
         geometry:
           $ref: '#/components/schemas/LocationGeometry'
         name:
-          description: |-
-            The name of the location.
-            Could be the name of the venue, or a custom name.
           title: name
           type: string
         placeId:
-          description: Google place id associated with this location.
           title: placeId
           type: string
         timezone:
-          description: >-
-            The timezone in IANA Time Zone format (e.g., 'America/Los_Angeles',
-            'Europe/Berlin').
-
-            See: https://www.iana.org/time-zones
           title: timezone
           type: string
         venueId:
-          description: Venue id associated with this location.
           title: venueId
           type: string
       required:
@@ -922,14 +846,47 @@ components:
       description: Represents the costs associated with an offering.
       properties:
         cost:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: cost
           type: string
         delivery:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: delivery
           type: string
         fee:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: fee
           type: string
@@ -939,6 +896,17 @@ components:
           title: gross
           type: string
         tax:
+          description: >-
+            A string representing a currency amount in the format `"USD,1000"`
+            where:
+
+            - `"USD"` is the 3-letter ISO currency code.
+
+            - The number after the comma represents the value in **minor units**
+            (e.g., cents for USD).
+
+
+            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
           pattern: ^\\w{3},\\d+$
           title: tax
           type: string
@@ -977,6 +945,7 @@ components:
         - package
         - service
         - skip
+        - tc-ticket
         - ticket
         - voucher
       title: OfferingType
@@ -1025,7 +994,11 @@ components:
           title: id
           type: string
         url:
-          description: Primary image URL.
+          description: >-
+            Primary image URL.
+
+            This is the default image URL to be used when no other resolution is
+            specified.
           title: url
           type: string
         width:
