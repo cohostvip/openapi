@@ -187,11 +187,6 @@ components:
         name:
           title: name
           type: string
-        ops:
-          items:
-            $ref: '#/components/schemas/CostOp'
-          title: ops
-          type: array
         payer:
           enum:
             - attendee
@@ -215,7 +210,6 @@ components:
         - bucket
         - currency
         - name
-        - ops
         - payer
         - recipient
         - rules
@@ -313,25 +307,20 @@ components:
       type: object
     CostOp:
       additionalProperties: false
+      description: Represents a cost operation to be applied in a pricing formula.
       properties:
-        op:
-          enum:
-            - '*'
-            - +
-            - '-'
-            - /
-          title: op
-          type: string
         value:
           description: >-
-            Absolute values should match the denominator, and denomination of
-            the cost.
+            The operand value used in the cost operation.
 
-            so if the amount in USD is in cents, the value should be in cents.
+
+            The unit should match the denomination of the cost.
+
+            For example, if cost is expressed in cents, this value should also
+            be in cents.
           title: value
           type: number
       required:
-        - op
         - value
       title: CostOp
       type: object
@@ -367,6 +356,24 @@ components:
       title: DataRecord
       type: object
     EqualOperator:
+      description: >-
+        A set of comparison operators used for evaluating conditional
+        expressions.
+
+
+        Supported operators:
+
+        - '==' (equal to)
+
+        - '!=' (not equal to)
+
+        - '<' (less than)
+
+        - '<=' (less than or equal to)
+
+        - '>' (greater than)
+
+        - '>=' (greater than or equal to)
       enum:
         - '!='
         - <
@@ -374,6 +381,7 @@ components:
         - '=='
         - '>'
         - '>='
+      ignore: ''
       title: EqualOperator
       type: string
     EventBase:

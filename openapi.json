@@ -193,13 +193,6 @@
             "title": "name",
             "type": "string"
           },
-          "ops": {
-            "items": {
-              "$ref": "#/components/schemas/CostOp"
-            },
-            "title": "ops",
-            "type": "array"
-          },
           "payer": {
             "enum": [
               "attendee",
@@ -230,7 +223,6 @@
           "bucket",
           "currency",
           "name",
-          "ops",
           "payer",
           "recipient",
           "rules",
@@ -324,25 +316,15 @@
       },
       "CostOp": {
         "additionalProperties": false,
+        "description": "Represents a cost operation to be applied in a pricing formula.",
         "properties": {
-          "op": {
-            "enum": [
-              "*",
-              "+",
-              "-",
-              "/"
-            ],
-            "title": "op",
-            "type": "string"
-          },
           "value": {
-            "description": "Absolute values should match the denominator, and denomination of the cost.\nso if the amount in USD is in cents, the value should be in cents.",
+            "description": "The operand value used in the cost operation.\n\nThe unit should match the denomination of the cost.\nFor example, if cost is expressed in cents, this value should also be in cents.",
             "title": "value",
             "type": "number"
           }
         },
         "required": [
-          "op",
           "value"
         ],
         "title": "CostOp",
@@ -377,6 +359,7 @@
         "type": "object"
       },
       "EqualOperator": {
+        "description": "A set of comparison operators used for evaluating conditional expressions.\n\nSupported operators:\n- '==' (equal to)\n- '!=' (not equal to)\n- '<' (less than)\n- '<=' (less than or equal to)\n- '>' (greater than)\n- '>=' (greater than or equal to)",
         "enum": [
           "!=",
           "<",
@@ -385,6 +368,7 @@
           ">",
           ">="
         ],
+        "ignore": "",
         "title": "EqualOperator",
         "type": "string"
       },
