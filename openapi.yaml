@@ -12,7 +12,6 @@ components:
       title: ActiveOfferingStatus
       type: string
     Address:
-      additionalProperties: false
       properties:
         address_1:
           title: address_1
@@ -61,14 +60,12 @@ components:
       const: '2025-04-15'
       type: string
     BuzzBuilder:
-      additionalProperties: false
       properties:
         countLabel:
           title: countLabel
           type: string
         profiles:
           items:
-            additionalProperties: false
             properties:
               id:
                 title: id
@@ -92,7 +89,6 @@ components:
       title: BuzzBuilder
       type: object
     CalculatedCostComponent:
-      additionalProperties: false
       properties:
         base:
           title: base
@@ -153,7 +149,6 @@ components:
       title: CalculatedCostComponent
       type: object
     CartSession:
-      additionalProperties: false
       description: |-
         Represents a temporary or persisted cart before order placement.
         Focuses on user intent and checkout prep, not post-purchase records.
@@ -174,7 +169,6 @@ components:
           title: contextId
           type: string
         costs:
-          additionalProperties: false
           description: |-
             Estimated totals based on current cart state.
             These values are subject to recalculation before checkout.
@@ -307,7 +301,7 @@ components:
         items:
           description: Items the user has added to their cart.
           items:
-            $ref: '#/components/schemas/OrderItem'
+            $ref: '#/components/schemas/Partial<OrderItem>'
           title: items
           type: array
         meta:
@@ -315,7 +309,6 @@ components:
           description: Internal metadata, flags, debug hints, or experimental context.
           properties:
             priceLock:
-              additionalProperties: false
               description: |-
                 Snapshot of when pricing was calculated and locked.
                 Useful for honoring totals during a grace window.
@@ -351,6 +344,7 @@ components:
         status:
           enum:
             - abandoned
+            - cancelled
             - completed
             - started
           title: status
@@ -361,6 +355,9 @@ components:
           type: string
         version:
           const: '2025-04-15'
+          description: |-
+            Schema version identifier for this record.
+            Helps manage compatibility across client-server contracts.
           title: version
           type: string
       required:
@@ -392,7 +389,6 @@ components:
       pattern: ^((evt|ven|org)_[a-zA-Z0-9]+)$
       type: string
     CostBase:
-      additionalProperties: false
       properties:
         cost:
           description: >-
@@ -470,7 +466,6 @@ components:
       title: CostBucket
       type: string
     CostComponent:
-      additionalProperties: false
       properties:
         base:
           title: base
@@ -521,7 +516,6 @@ components:
       title: CostComponent
       type: object
     CostComponentCap:
-      additionalProperties: false
       properties:
         op:
           const: cap
@@ -558,7 +552,6 @@ components:
       title: CostComponentCap
       type: object
     CostComponentRule:
-      additionalProperties: false
       properties:
         conditions:
           description: >-
@@ -578,7 +571,6 @@ components:
       title: CostComponentRule
       type: object
     CostComponentRuleCondition:
-      additionalProperties: false
       properties:
         eval:
           description: >-
@@ -610,7 +602,6 @@ components:
       title: CostComponentRuleCondition
       type: object
     CostOp:
-      additionalProperties: false
       description: Represents a cost operation to be applied in a pricing formula.
       properties:
         value:
@@ -629,7 +620,6 @@ components:
       title: CostOp
       type: object
     Coupon:
-      additionalProperties: false
       description: >-
         Represents a discount coupon that can be applied to one or more
         offerings in an event platform.
@@ -663,7 +653,6 @@ components:
           title: companyId
           type: string
         constraints:
-          additionalProperties: false
           description: >-
             Time-based constraints that control when the coupon is active and
             when it expires.
@@ -783,7 +772,6 @@ components:
       title: Coupon
       type: object
     CouponSummary:
-      additionalProperties: false
       properties:
         amountOff:
           description: >-
@@ -848,17 +836,18 @@ components:
       pattern: ^\\w{3},\\d+$
       type: string
     Customer:
-      additionalProperties: false
-      properties:
-        uid:
-          title: uid
-          type: string
-      required:
-        - uid
+      allOf:
+        - $ref: '#/components/schemas/Person'
+        - $ref: '#/components/schemas/PersonContact'
+        - properties:
+            uid:
+              title: uid
+              type: string
+          required:
+            - uid
+          type: object
       title: Customer
-      type: object
     DataRecord:
-      additionalProperties: false
       description: |-
         Base metadata for any record stored in the system.
         Includes an ID and timestamps for creation and optional updates.
@@ -912,7 +901,6 @@ components:
       title: EqualOperator
       type: string
     EventBase:
-      additionalProperties: false
       properties:
         companyId:
           title: companyId
@@ -938,6 +926,7 @@ components:
         name:
           title: name
           type: string
+          x-faker: name.firstName
         public:
           description: Is the event public?
           title: public
@@ -971,7 +960,6 @@ components:
       title: EventBase
       type: object
     EventFeature:
-      additionalProperties: false
       properties:
         data:
           title: data
@@ -1023,7 +1011,6 @@ components:
       title: EventFeature
       type: object
     EventProfile:
-      additionalProperties: false
       description: EventProfile respresent a public view of an event
       properties:
         buzzBuilder:
@@ -1061,10 +1048,10 @@ components:
         name:
           title: name
           type: string
+          x-faker: name.firstName
         organizer:
           title: organizer
         priceRange:
-          additionalProperties: false
           properties:
             max:
               title: max
@@ -1176,7 +1163,6 @@ components:
       title: EventStatus
       type: string
     GeometryPoint:
-      additionalProperties: false
       properties:
         lat:
           title: lat
@@ -1190,7 +1176,6 @@ components:
       title: GeometryPoint
       type: object
     Location:
-      additionalProperties: false
       properties:
         address:
           $ref: '#/components/schemas/Address'
@@ -1217,7 +1202,6 @@ components:
       title: Location
       type: object
     LocationGeometry:
-      additionalProperties: false
       properties:
         geoHash:
           title: geoHash
@@ -1238,7 +1222,6 @@ components:
           title: vicinity
           type: string
         viewport:
-          additionalProperties: false
           properties:
             northeast:
               $ref: '#/components/schemas/GeometryPoint'
@@ -1258,7 +1241,6 @@ components:
       title: LocationGeometry
       type: object
     MultipartText:
-      additionalProperties: false
       description: A rich content object that supports multiple representations of text.
       properties:
         blocks:
@@ -1281,7 +1263,6 @@ components:
       title: MultipartText
       type: object
     Offering:
-      additionalProperties: false
       properties:
         capacity:
           title: capacity
@@ -1301,6 +1282,8 @@ components:
           description: |-
             Describe fees and other costs associated with purchasing tickets
             to this offering
+
+            --@schema array(z.any()).optional()
           items:
             $ref: '#/components/schemas/CostComponent'
           title: costComponents
@@ -1345,10 +1328,6 @@ components:
         package:
           title: package
           type: boolean
-        parentPath:
-          description: Parent doc assicated with this offering in the DB.
-          title: parentPath
-          type: string
         priceCategory:
           $ref: '#/components/schemas/PriceCategory'
         quantitySold:
@@ -1365,7 +1344,6 @@ components:
           $ref: '#/components/schemas/OfferingType'
       required:
         - capacity
-        - constraints
         - costs
         - created
         - hidden
@@ -1373,7 +1351,6 @@ components:
         - maximumQuantity
         - minimumQuantity
         - name
-        - parentPath
         - priceCategory
         - quantitySold
         - sorting
@@ -1382,7 +1359,6 @@ components:
       title: Offering
       type: object
     OfferingCosts:
-      additionalProperties: false
       description: Represents the costs associated with an offering.
       properties:
         cost:
@@ -1491,11 +1467,9 @@ components:
       title: OfferingType
       type: string
     Order:
-      additionalProperties: false
       description: Represents an order in the system.
       properties:
         agreements:
-          additionalProperties: false
           description: Agreement flags for terms and marketing opt-ins.
           properties:
             agreedToOrganizerTerms:
@@ -1530,9 +1504,12 @@ components:
           type: object
         changed:
           description: >-
-            The ISO 8601 timestamp indicating the last time the order was
-            modified.
+            ISO 8601 timestamp indicating when the record was last updated, if
+            applicable.
           title: changed
+          type: string
+        companyId:
+          title: companyId
           type: string
         context:
           $ref: '#/components/schemas/OrderContext'
@@ -1554,9 +1531,7 @@ components:
           title: coupons
           type: array
         created:
-          description: >-
-            The ISO 8601 timestamp indicating when the order was initially
-            created.
+          description: ISO 8601 timestamp indicating when the record was created.
           title: created
           type: string
         currency:
@@ -1574,7 +1549,7 @@ components:
             IDs, etc.
           title: forwarded
         id:
-          description: Unique identifier for the order.
+          description: Unique identifier for the record.
           title: id
           type: string
         items:
@@ -1600,12 +1575,15 @@ components:
           $ref: '#/components/schemas/OrderStatus'
         version:
           const: '2025-04-15'
+          description: |-
+            Schema version identifier for this record.
+            Helps manage compatibility across client-server contracts.
           title: version
           type: string
       required:
         - agreements
         - answers
-        - changed
+        - companyId
         - context
         - contextId
         - costs
@@ -1685,7 +1663,6 @@ components:
       title: OrderContext
       type: object
     OrderCosts:
-      additionalProperties: false
       properties:
         delivery:
           description: >-
@@ -1819,7 +1796,6 @@ components:
       title: OrderCosts
       type: object
     OrderItem:
-      additionalProperties: false
       description: Represents an individual item within an order.
       properties:
         costComponents:
@@ -1848,24 +1824,7 @@ components:
             This can include custom fields or additional information.
           title: meta
         offering:
-          additionalProperties: false
-          properties:
-            docPath:
-              description: doc assicated with this offering in the DB.
-              title: docPath
-              type: string
-            name:
-              description: Offering name, can be ticket name, vaucher name, etc...
-              title: name
-              type: string
-            type:
-              $ref: '#/components/schemas/OfferingType'
-          required:
-            - docPath
-            - name
-            - type
-          title: offering
-          type: object
+          $ref: '#/components/schemas/OrderItemOffering'
         offeringId:
           description: ID of the offering purchased.
           title: offeringId
@@ -1889,7 +1848,6 @@ components:
       title: OrderItem
       type: object
     OrderItemCosts:
-      additionalProperties: false
       description: >-
         Cost breakdown for a specific item in the order.
 
@@ -1995,6 +1953,27 @@ components:
         - total
       title: OrderItemCosts
       type: object
+    OrderItemOffering:
+      properties:
+        costs:
+          $ref: '#/components/schemas/OfferingCosts'
+        docPath:
+          description: doc assicated with this offering in the DB.
+          title: docPath
+          type: string
+        name:
+          description: Offering name, can be ticket name, vaucher name, etc...
+          title: name
+          type: string
+        type:
+          $ref: '#/components/schemas/OfferingType'
+      required:
+        - costs
+        - docPath
+        - name
+        - type
+      title: OrderItemOffering
+      type: object
     OrderStatus:
       enum:
         - abandoned
@@ -2008,7 +1987,6 @@ components:
       title: OrderStatus
       type: string
     PackageInclude:
-      additionalProperties: false
       properties:
         description:
           title: description
@@ -2031,7 +2009,6 @@ components:
       title: PackageInclude
       type: object
     Partial<Customer>:
-      additionalProperties: false
       properties:
         age:
           title: age
@@ -2069,7 +2046,6 @@ components:
       title: Partial<Customer>
       type: object
     Partial<OrderContext>:
-      additionalProperties: false
       properties:
         cartSessionId:
           description: >-
@@ -2115,8 +2091,48 @@ components:
           type: string
       title: Partial<OrderContext>
       type: object
+    Partial<OrderItem>:
+      properties:
+        costComponents:
+          description: Breakdown of cost components (e.g., base, service fee, delivery).
+          items:
+            $ref: '#/components/schemas/CalculatedCostComponent'
+          title: costComponents
+          type: array
+        costs:
+          $ref: '#/components/schemas/OrderItemCosts'
+        id:
+          description: Unique ID for this order item.
+          title: id
+          type: string
+        includedWithItemId:
+          description: >-
+            If this item is included as part of a package, this is the ID of the
+            parent item.
+
+            Otherwise, null.
+          title: includedWithItemId
+          type: string
+        meta:
+          description: |-
+            Any relevant metadata associated with this item.
+            This can include custom fields or additional information.
+          title: meta
+        offering:
+          $ref: '#/components/schemas/OrderItemOffering'
+        offeringId:
+          description: ID of the offering purchased.
+          title: offeringId
+          type: string
+        offeringType:
+          $ref: '#/components/schemas/OfferingType'
+        quantity:
+          description: Quantity purchased of this item.
+          title: quantity
+          type: number
+      title: Partial<OrderItem>
+      type: object
     Person:
-      additionalProperties: false
       description: Person interface
       properties:
         age:
@@ -2152,7 +2168,6 @@ components:
       title: Person
       type: object
     PersonContact:
-      additionalProperties: false
       properties:
         email:
           title: email
@@ -2166,7 +2181,6 @@ components:
       title: PersonContact
       type: object
     Photo:
-      additionalProperties: false
       description: A photo object with resolution options and optional metadata.
       properties:
         2x:
@@ -2193,6 +2207,7 @@ components:
             specified.
           title: url
           type: string
+          x-faker: image.url
         width:
           description: Width of the image in pixels.
           title: width
@@ -2209,12 +2224,10 @@ components:
         - paid
       title: PriceCategory
       type: string
-    Record<string,Partial<Offering>>:
-      additionalProperties: false
-      title: Record<string,Partial<Offering>>
+    Record<string,ResolvedCartContextOffering>:
+      title: Record<string,ResolvedCartContextOffering>
       type: object
     ResolvedCartContext:
-      additionalProperties: false
       description: >-
         Represents the resolved context associated with a cart session.
 
@@ -2238,7 +2251,7 @@ components:
         logo:
           $ref: '#/components/schemas/Photo'
         offerings:
-          $ref: '#/components/schemas/Record<string,Partial<Offering>>'
+          $ref: '#/components/schemas/Record<string,ResolvedCartContextOffering>'
         title:
           description: |-
             Human-readable title or name of the context entity.
@@ -2250,8 +2263,19 @@ components:
         - title
       title: ResolvedCartContext
       type: object
+    ResolvedCartContextOffering:
+      properties:
+        offering:
+          $ref: '#/components/schemas/Offering'
+        path:
+          title: path
+          type: string
+      required:
+        - offering
+        - path
+      title: ResolvedCartContextOffering
+      type: object
     Schedule:
-      additionalProperties: false
       description: A repeating or structured date schedule for an event or item.
       properties:
         daysOfWeek:
@@ -2286,7 +2310,6 @@ components:
       title: Schedule
       type: object
     Ticket:
-      additionalProperties: false
       properties:
         capacity:
           title: capacity
@@ -2304,6 +2327,8 @@ components:
           description: |-
             Describe fees and other costs associated with purchasing tickets
             to this offering
+
+            --@schema array(z.any()).optional()
           items:
             $ref: '#/components/schemas/CostComponent'
           title: costComponents
@@ -2328,11 +2353,6 @@ components:
           items:
             $ref: '#/components/schemas/PackageInclude'
           title: included
-          type: array
-        includedTickets:
-          items:
-            $ref: '#/components/schemas/Ticket'
-          title: includedTickets
           type: array
         instructions:
           title: instructions
@@ -2411,8 +2431,7 @@ components:
       type: object
     TimeOrOffset:
       anyOf:
-        - additionalProperties: false
-          properties:
+        - properties:
             date:
               description: Absolute time in ISO 8601 format.
               title: date
@@ -2420,8 +2439,7 @@ components:
           required:
             - date
           type: object
-        - additionalProperties: false
-          properties:
+        - properties:
             secondsBefore:
               description: >-
                 Relative time before an anchor point (e.g. event start), in
@@ -2437,8 +2455,54 @@ components:
         - If using `date`, `secondsBefore` must not be present.
         - If using `secondsBefore`, `date` must not be present.
       title: TimeOrOffset
+    UpdatableCartSession:
+      properties:
+        customer:
+          $ref: '#/components/schemas/Partial<Customer>'
+        items:
+          description: Items the user has added to their cart.
+          items:
+            $ref: '#/components/schemas/Partial<OrderItem>'
+          title: items
+          type: array
+      required:
+        - items
+      title: UpdatableCartSession
+      type: object
+    VCDataRecord:
+      properties:
+        changed:
+          description: >-
+            ISO 8601 timestamp indicating when the record was last updated, if
+            applicable.
+          title: changed
+          type: string
+        companyId:
+          title: companyId
+          type: string
+        created:
+          description: ISO 8601 timestamp indicating when the record was created.
+          title: created
+          type: string
+        id:
+          description: Unique identifier for the record.
+          title: id
+          type: string
+        version:
+          const: '2025-04-15'
+          description: |-
+            Schema version identifier for this record.
+            Helps manage compatibility across client-server contracts.
+          title: version
+          type: string
+      required:
+        - companyId
+        - created
+        - id
+        - version
+      title: VCDataRecord
+      type: object
     VenueBase:
-      additionalProperties: false
       properties:
         address:
           $ref: '#/components/schemas/Address'
@@ -2477,7 +2541,6 @@ components:
       title: VenueBase
       type: object
     VersionedDataRecord:
-      additionalProperties: false
       description: |-
         Extension of `DataRecord` for resources returned from RESTful APIs.
         Includes a schema version to ensure compatibility with evolving formats.
@@ -2510,14 +2573,73 @@ components:
       title: VersionedDataRecord
       type: object
 paths:
+  /events:
+    get:
+      summary: List all event profiles for the authenticated organizer
+      operationId: listEventProfiles
+      tags:
+        - Events
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of event profiles
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - data
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - ok
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/EventProfile'
+        '401':
+          description: Unauthorized - missing organizerId
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - error
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: string
+                    example: Unauthorized
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - error
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: string
+                    example: Internal Server Error
   /events/{id}:
     get:
       summary: Get event profile
       operationId: getEvent
       tags:
         - Events
-      x-google-backend:
-        address: https://${region}-${project}.cloudfunctions.net/eventsRestful
       parameters:
         - in: path
           name: id
@@ -2556,8 +2678,6 @@ paths:
       operationId: getEventTickets
       tags:
         - Events
-      x-google-backend:
-        address: https://${region}-${project}.cloudfunctions.net/eventsRestful
       description: Retrieve a list of tickets for a specific event.
       parameters:
         - in: path
@@ -2620,22 +2740,129 @@ paths:
               properties:
                 contextId:
                   type: string
-                  description: Context entity ID (e.g., evt_xxx, org_xxx)
                   example: evt_abc123
                 userAgent:
                   type: string
                   example: Mozilla/5.0
                 referrer:
                   type: string
-                  example: https://example.com/checkout
+                  example: https://example.com
+                ipAddresses:
+                  type: array
+                  items:
+                    type: string
       responses:
         '200':
-          description: A new cart session was created
+          description: Cart session started
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CartSession'
-        '400':
-          description: Invalid input
+        '500':
+          description: Server error
+  /cart/sessions/{id}:
+    get:
+      summary: Get a cart session by ID
+      tags:
+        - Cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Cart session ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Cart session found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSession'
+        '404':
+          description: Cart session not found
+        '500':
+          description: Server error
+    patch:
+      summary: Update a cart session
+      tags:
+        - Cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Cart session ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatableCartSession'
+      responses:
+        '200':
+          description: Cart session updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSession'
+        '404':
+          description: Cart session not found
+        '500':
+          description: Server error
+    delete:
+      summary: Cancel (soft delete) a cart session
+      tags:
+        - Cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Cart session ID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Cart session cancelled
+        '500':
+          description: Server error
+  /cart/sessions/{id}/item:
+    post:
+      summary: Add, update, or remove an item (ticket) in a cart session
+      tags:
+        - Cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the cart session
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - offeringId
+                - quantity
+              properties:
+                offeringId:
+                  type: string
+                  description: The ID of the item to update
+                  example: item_123abc
+                quantity:
+                  type: number
+                  description: The quantity to set. Use 0 to remove the item
+                  example: 1
+      responses:
+        '200':
+          description: Cart session updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSession'
         '500':
           description: Server error

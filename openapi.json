@@ -16,7 +16,6 @@
         "type": "string"
       },
       "Address": {
-        "additionalProperties": false,
         "properties": {
           "address_1": {
             "title": "address_1",
@@ -81,7 +80,6 @@
         "type": "string"
       },
       "BuzzBuilder": {
-        "additionalProperties": false,
         "properties": {
           "countLabel": {
             "title": "countLabel",
@@ -89,7 +87,6 @@
           },
           "profiles": {
             "items": {
-              "additionalProperties": false,
               "properties": {
                 "id": {
                   "title": "id",
@@ -123,7 +120,6 @@
         "type": "object"
       },
       "CalculatedCostComponent": {
-        "additionalProperties": false,
         "properties": {
           "base": {
             "title": "base",
@@ -188,7 +184,6 @@
         "type": "object"
       },
       "CartSession": {
-        "additionalProperties": false,
         "description": "Represents a temporary or persisted cart before order placement.\nFocuses on user intent and checkout prep, not post-purchase records.",
         "properties": {
           "changed": {
@@ -206,7 +201,6 @@
             "type": "string"
           },
           "costs": {
-            "additionalProperties": false,
             "description": "Estimated totals based on current cart state.\nThese values are subject to recalculation before checkout.",
             "properties": {
               "delivery": {
@@ -291,7 +285,7 @@
           "items": {
             "description": "Items the user has added to their cart.",
             "items": {
-              "$ref": "#/components/schemas/OrderItem"
+              "$ref": "#/components/schemas/Partial<OrderItem>"
             },
             "title": "items",
             "type": "array"
@@ -301,7 +295,6 @@
             "description": "Internal metadata, flags, debug hints, or experimental context.",
             "properties": {
               "priceLock": {
-                "additionalProperties": false,
                 "description": "Snapshot of when pricing was calculated and locked.\nUseful for honoring totals during a grace window.",
                 "properties": {
                   "lockedAt": {
@@ -339,6 +332,7 @@
           "status": {
             "enum": [
               "abandoned",
+              "cancelled",
               "completed",
               "started"
             ],
@@ -352,6 +346,7 @@
           },
           "version": {
             "const": "2025-04-15",
+            "description": "Schema version identifier for this record.\nHelps manage compatibility across client-server contracts.",
             "title": "version",
             "type": "string"
           }
@@ -377,7 +372,6 @@
         "type": "string"
       },
       "CostBase": {
-        "additionalProperties": false,
         "properties": {
           "cost": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
@@ -424,7 +418,6 @@
         "type": "string"
       },
       "CostComponent": {
-        "additionalProperties": false,
         "properties": {
           "base": {
             "title": "base",
@@ -491,7 +484,6 @@
         "type": "object"
       },
       "CostComponentCap": {
-        "additionalProperties": false,
         "properties": {
           "op": {
             "const": "cap",
@@ -521,7 +513,6 @@
         "type": "object"
       },
       "CostComponentRule": {
-        "additionalProperties": false,
         "properties": {
           "conditions": {
             "description": "The rule will be applied to the cost component if the conditions are met.",
@@ -545,7 +536,6 @@
         "type": "object"
       },
       "CostComponentRuleCondition": {
-        "additionalProperties": false,
         "properties": {
           "eval": {
             "description": "evaluator, will define a function or endpoint to evaluate the condition.",
@@ -574,7 +564,6 @@
         "type": "object"
       },
       "CostOp": {
-        "additionalProperties": false,
         "description": "Represents a cost operation to be applied in a pricing formula.",
         "properties": {
           "value": {
@@ -590,7 +579,6 @@
         "type": "object"
       },
       "Coupon": {
-        "additionalProperties": false,
         "description": "Represents a discount coupon that can be applied to one or more offerings in an event platform.",
         "properties": {
           "amountOff": {
@@ -616,7 +604,6 @@
             "type": "string"
           },
           "constraints": {
-            "additionalProperties": false,
             "description": "Time-based constraints that control when the coupon is active and when it expires.\nSupports absolute dates or relative time offsets (in seconds) from event start.\n\n- If `start` is omitted, the coupon is valid immediately.\n- If `end` is omitted, the coupon remains valid until the event ends.",
             "properties": {
               "end": {
@@ -727,7 +714,6 @@
         "type": "object"
       },
       "CouponSummary": {
-        "additionalProperties": false,
         "properties": {
           "amountOff": {
             "description": "Fixed amount to deduct from the order total.\nThis is a currency-less value that matches the event or order currency.\nExample: `10.00` = $10.00 off.",
@@ -778,21 +764,29 @@
         "type": "string"
       },
       "Customer": {
-        "additionalProperties": false,
-        "properties": {
-          "uid": {
-            "title": "uid",
-            "type": "string"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Person"
+          },
+          {
+            "$ref": "#/components/schemas/PersonContact"
+          },
+          {
+            "properties": {
+              "uid": {
+                "title": "uid",
+                "type": "string"
+              }
+            },
+            "required": [
+              "uid"
+            ],
+            "type": "object"
           }
-        },
-        "required": [
-          "uid"
         ],
-        "title": "Customer",
-        "type": "object"
+        "title": "Customer"
       },
       "DataRecord": {
-        "additionalProperties": false,
         "description": "Base metadata for any record stored in the system.\nIncludes an ID and timestamps for creation and optional updates.",
         "properties": {
           "changed": {
@@ -833,7 +827,6 @@
         "type": "string"
       },
       "EventBase": {
-        "additionalProperties": false,
         "properties": {
           "companyId": {
             "title": "companyId",
@@ -865,7 +858,8 @@
           },
           "name": {
             "title": "name",
-            "type": "string"
+            "type": "string",
+            "x-faker": "name.firstName"
           },
           "public": {
             "description": "Is the event public?",
@@ -909,7 +903,6 @@
         "type": "object"
       },
       "EventFeature": {
-        "additionalProperties": false,
         "properties": {
           "data": {
             "title": "data"
@@ -977,7 +970,6 @@
         "type": "object"
       },
       "EventProfile": {
-        "additionalProperties": false,
         "description": "EventProfile respresent a public view of an event",
         "properties": {
           "buzzBuilder": {
@@ -1026,13 +1018,13 @@
           },
           "name": {
             "title": "name",
-            "type": "string"
+            "type": "string",
+            "x-faker": "name.firstName"
           },
           "organizer": {
             "title": "organizer"
           },
           "priceRange": {
-            "additionalProperties": false,
             "properties": {
               "max": {
                 "title": "max",
@@ -1154,7 +1146,6 @@
         "type": "string"
       },
       "GeometryPoint": {
-        "additionalProperties": false,
         "properties": {
           "lat": {
             "title": "lat",
@@ -1173,7 +1164,6 @@
         "type": "object"
       },
       "Location": {
-        "additionalProperties": false,
         "properties": {
           "address": {
             "$ref": "#/components/schemas/Address"
@@ -1209,7 +1199,6 @@
         "type": "object"
       },
       "LocationGeometry": {
-        "additionalProperties": false,
         "properties": {
           "geoHash": {
             "title": "geoHash",
@@ -1236,7 +1225,6 @@
             "type": "string"
           },
           "viewport": {
-            "additionalProperties": false,
             "properties": {
               "northeast": {
                 "$ref": "#/components/schemas/GeometryPoint"
@@ -1265,7 +1253,6 @@
         "type": "object"
       },
       "MultipartText": {
-        "additionalProperties": false,
         "description": "A rich content object that supports multiple representations of text.",
         "properties": {
           "blocks": {
@@ -1294,7 +1281,6 @@
         "type": "object"
       },
       "Offering": {
-        "additionalProperties": false,
         "properties": {
           "capacity": {
             "title": "capacity",
@@ -1310,7 +1296,7 @@
             "title": "constraints"
           },
           "costComponents": {
-            "description": "Describe fees and other costs associated with purchasing tickets\nto this offering",
+            "description": "Describe fees and other costs associated with purchasing tickets\nto this offering\n\n--@schema array(z.any()).optional()",
             "items": {
               "$ref": "#/components/schemas/CostComponent"
             },
@@ -1370,11 +1356,6 @@
             "title": "package",
             "type": "boolean"
           },
-          "parentPath": {
-            "description": "Parent doc assicated with this offering in the DB.",
-            "title": "parentPath",
-            "type": "string"
-          },
           "priceCategory": {
             "$ref": "#/components/schemas/PriceCategory"
           },
@@ -1398,7 +1379,6 @@
         },
         "required": [
           "capacity",
-          "constraints",
           "costs",
           "created",
           "hidden",
@@ -1406,7 +1386,6 @@
           "maximumQuantity",
           "minimumQuantity",
           "name",
-          "parentPath",
           "priceCategory",
           "quantitySold",
           "sorting",
@@ -1417,7 +1396,6 @@
         "type": "object"
       },
       "OfferingCosts": {
-        "additionalProperties": false,
         "description": "Represents the costs associated with an offering.",
         "properties": {
           "cost": {
@@ -1499,11 +1477,9 @@
         "type": "string"
       },
       "Order": {
-        "additionalProperties": false,
         "description": "Represents an order in the system.",
         "properties": {
           "agreements": {
-            "additionalProperties": false,
             "description": "Agreement flags for terms and marketing opt-ins.",
             "properties": {
               "agreedToOrganizerTerms": {
@@ -1542,8 +1518,12 @@
             "type": "object"
           },
           "changed": {
-            "description": "The ISO 8601 timestamp indicating the last time the order was modified.",
+            "description": "ISO 8601 timestamp indicating when the record was last updated, if applicable.",
             "title": "changed",
+            "type": "string"
+          },
+          "companyId": {
+            "title": "companyId",
             "type": "string"
           },
           "context": {
@@ -1567,7 +1547,7 @@
             "type": "array"
           },
           "created": {
-            "description": "The ISO 8601 timestamp indicating when the order was initially created.",
+            "description": "ISO 8601 timestamp indicating when the record was created.",
             "title": "created",
             "type": "string"
           },
@@ -1585,7 +1565,7 @@
             "title": "forwarded"
           },
           "id": {
-            "description": "Unique identifier for the order.",
+            "description": "Unique identifier for the record.",
             "title": "id",
             "type": "string"
           },
@@ -1611,6 +1591,7 @@
           },
           "version": {
             "const": "2025-04-15",
+            "description": "Schema version identifier for this record.\nHelps manage compatibility across client-server contracts.",
             "title": "version",
             "type": "string"
           }
@@ -1618,7 +1599,7 @@
         "required": [
           "agreements",
           "answers",
-          "changed",
+          "companyId",
           "context",
           "contextId",
           "costs",
@@ -1690,7 +1671,6 @@
         "type": "object"
       },
       "OrderCosts": {
-        "additionalProperties": false,
         "properties": {
           "delivery": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
@@ -1755,7 +1735,6 @@
         "type": "object"
       },
       "OrderItem": {
-        "additionalProperties": false,
         "description": "Represents an individual item within an order.",
         "properties": {
           "costComponents": {
@@ -1784,29 +1763,7 @@
             "title": "meta"
           },
           "offering": {
-            "additionalProperties": false,
-            "properties": {
-              "docPath": {
-                "description": "doc assicated with this offering in the DB.",
-                "title": "docPath",
-                "type": "string"
-              },
-              "name": {
-                "description": "Offering name, can be ticket name, vaucher name, etc...",
-                "title": "name",
-                "type": "string"
-              },
-              "type": {
-                "$ref": "#/components/schemas/OfferingType"
-              }
-            },
-            "required": [
-              "docPath",
-              "name",
-              "type"
-            ],
-            "title": "offering",
-            "type": "object"
+            "$ref": "#/components/schemas/OrderItemOffering"
           },
           "offeringId": {
             "description": "ID of the offering purchased.",
@@ -1837,7 +1794,6 @@
         "type": "object"
       },
       "OrderItemCosts": {
-        "additionalProperties": false,
         "description": "Cost breakdown for a specific item in the order.\nExtends the standard `OfferingCosts` with totals calculated for quantity and discounts.",
         "properties": {
           "cost": {
@@ -1909,6 +1865,34 @@
         "title": "OrderItemCosts",
         "type": "object"
       },
+      "OrderItemOffering": {
+        "properties": {
+          "costs": {
+            "$ref": "#/components/schemas/OfferingCosts"
+          },
+          "docPath": {
+            "description": "doc assicated with this offering in the DB.",
+            "title": "docPath",
+            "type": "string"
+          },
+          "name": {
+            "description": "Offering name, can be ticket name, vaucher name, etc...",
+            "title": "name",
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OfferingType"
+          }
+        },
+        "required": [
+          "costs",
+          "docPath",
+          "name",
+          "type"
+        ],
+        "title": "OrderItemOffering",
+        "type": "object"
+      },
       "OrderStatus": {
         "enum": [
           "abandoned",
@@ -1924,7 +1908,6 @@
         "type": "string"
       },
       "PackageInclude": {
-        "additionalProperties": false,
         "properties": {
           "description": {
             "title": "description",
@@ -1955,7 +1938,6 @@
         "type": "object"
       },
       "Partial<Customer>": {
-        "additionalProperties": false,
         "properties": {
           "age": {
             "title": "age",
@@ -2006,7 +1988,6 @@
         "type": "object"
       },
       "Partial<OrderContext>": {
-        "additionalProperties": false,
         "properties": {
           "cartSessionId": {
             "description": "The unique cart session ID assigned at the time the cart was created.\nHelps track cart attribution across systems.",
@@ -2050,8 +2031,54 @@
         "title": "Partial<OrderContext>",
         "type": "object"
       },
+      "Partial<OrderItem>": {
+        "properties": {
+          "costComponents": {
+            "description": "Breakdown of cost components (e.g., base, service fee, delivery).",
+            "items": {
+              "$ref": "#/components/schemas/CalculatedCostComponent"
+            },
+            "title": "costComponents",
+            "type": "array"
+          },
+          "costs": {
+            "$ref": "#/components/schemas/OrderItemCosts"
+          },
+          "id": {
+            "description": "Unique ID for this order item.",
+            "title": "id",
+            "type": "string"
+          },
+          "includedWithItemId": {
+            "description": "If this item is included as part of a package, this is the ID of the parent item.\nOtherwise, null.",
+            "title": "includedWithItemId",
+            "type": "string"
+          },
+          "meta": {
+            "description": "Any relevant metadata associated with this item.\nThis can include custom fields or additional information.",
+            "title": "meta"
+          },
+          "offering": {
+            "$ref": "#/components/schemas/OrderItemOffering"
+          },
+          "offeringId": {
+            "description": "ID of the offering purchased.",
+            "title": "offeringId",
+            "type": "string"
+          },
+          "offeringType": {
+            "$ref": "#/components/schemas/OfferingType"
+          },
+          "quantity": {
+            "description": "Quantity purchased of this item.",
+            "title": "quantity",
+            "type": "number"
+          }
+        },
+        "title": "Partial<OrderItem>",
+        "type": "object"
+      },
       "Person": {
-        "additionalProperties": false,
         "description": "Person interface",
         "properties": {
           "age": {
@@ -2098,7 +2125,6 @@
         "type": "object"
       },
       "PersonContact": {
-        "additionalProperties": false,
         "properties": {
           "email": {
             "title": "email",
@@ -2117,7 +2143,6 @@
         "type": "object"
       },
       "Photo": {
-        "additionalProperties": false,
         "description": "A photo object with resolution options and optional metadata.",
         "properties": {
           "2x": {
@@ -2143,7 +2168,8 @@
           "url": {
             "description": "Primary image URL.\nThis is the default image URL to be used when no other resolution is specified.",
             "title": "url",
-            "type": "string"
+            "type": "string",
+            "x-faker": "image.url"
           },
           "width": {
             "description": "Width of the image in pixels.",
@@ -2167,13 +2193,11 @@
         "title": "PriceCategory",
         "type": "string"
       },
-      "Record<string,Partial<Offering>>": {
-        "additionalProperties": false,
-        "title": "Record<string,Partial<Offering>>",
+      "Record<string,ResolvedCartContextOffering>": {
+        "title": "Record<string,ResolvedCartContextOffering>",
         "type": "object"
       },
       "ResolvedCartContext": {
-        "additionalProperties": false,
         "description": "Represents the resolved context associated with a cart session.\nThis may be an event, venue, or organizer, and is used to enrich the cart with metadata\nneeded for UI rendering and pricing logic without requiring repeated DB lookups.\n\nTypically stored in `cart.meta.resolvedContext`.",
         "properties": {
           "id": {
@@ -2188,7 +2212,7 @@
             "$ref": "#/components/schemas/Photo"
           },
           "offerings": {
-            "$ref": "#/components/schemas/Record<string,Partial<Offering>>"
+            "$ref": "#/components/schemas/Record<string,ResolvedCartContextOffering>"
           },
           "title": {
             "description": "Human-readable title or name of the context entity.\nUsed for display in headers, summaries, and confirmations.",
@@ -2203,8 +2227,24 @@
         "title": "ResolvedCartContext",
         "type": "object"
       },
+      "ResolvedCartContextOffering": {
+        "properties": {
+          "offering": {
+            "$ref": "#/components/schemas/Offering"
+          },
+          "path": {
+            "title": "path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "offering",
+          "path"
+        ],
+        "title": "ResolvedCartContextOffering",
+        "type": "object"
+      },
       "Schedule": {
-        "additionalProperties": false,
         "description": "A repeating or structured date schedule for an event or item.",
         "properties": {
           "daysOfWeek": {
@@ -2250,7 +2290,6 @@
         "type": "object"
       },
       "Ticket": {
-        "additionalProperties": false,
         "properties": {
           "capacity": {
             "title": "capacity",
@@ -2266,7 +2305,7 @@
             "type": "string"
           },
           "costComponents": {
-            "description": "Describe fees and other costs associated with purchasing tickets\nto this offering",
+            "description": "Describe fees and other costs associated with purchasing tickets\nto this offering\n\n--@schema array(z.any()).optional()",
             "items": {
               "$ref": "#/components/schemas/CostComponent"
             },
@@ -2299,13 +2338,6 @@
               "$ref": "#/components/schemas/PackageInclude"
             },
             "title": "included",
-            "type": "array"
-          },
-          "includedTickets": {
-            "items": {
-              "$ref": "#/components/schemas/Ticket"
-            },
-            "title": "includedTickets",
             "type": "array"
           },
           "instructions": {
@@ -2408,7 +2440,6 @@
       "TimeOrOffset": {
         "anyOf": [
           {
-            "additionalProperties": false,
             "properties": {
               "date": {
                 "description": "Absolute time in ISO 8601 format.",
@@ -2422,7 +2453,6 @@
             "type": "object"
           },
           {
-            "additionalProperties": false,
             "properties": {
               "secondsBefore": {
                 "description": "Relative time before an anchor point (e.g. event start), in seconds.",
@@ -2439,8 +2469,64 @@
         "description": "Represents either an absolute or a relative time constraint.\n\n- If using `date`, `secondsBefore` must not be present.\n- If using `secondsBefore`, `date` must not be present.",
         "title": "TimeOrOffset"
       },
+      "UpdatableCartSession": {
+        "properties": {
+          "customer": {
+            "$ref": "#/components/schemas/Partial<Customer>"
+          },
+          "items": {
+            "description": "Items the user has added to their cart.",
+            "items": {
+              "$ref": "#/components/schemas/Partial<OrderItem>"
+            },
+            "title": "items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "UpdatableCartSession",
+        "type": "object"
+      },
+      "VCDataRecord": {
+        "properties": {
+          "changed": {
+            "description": "ISO 8601 timestamp indicating when the record was last updated, if applicable.",
+            "title": "changed",
+            "type": "string"
+          },
+          "companyId": {
+            "title": "companyId",
+            "type": "string"
+          },
+          "created": {
+            "description": "ISO 8601 timestamp indicating when the record was created.",
+            "title": "created",
+            "type": "string"
+          },
+          "id": {
+            "description": "Unique identifier for the record.",
+            "title": "id",
+            "type": "string"
+          },
+          "version": {
+            "const": "2025-04-15",
+            "description": "Schema version identifier for this record.\nHelps manage compatibility across client-server contracts.",
+            "title": "version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "companyId",
+          "created",
+          "id",
+          "version"
+        ],
+        "title": "VCDataRecord",
+        "type": "object"
+      },
       "VenueBase": {
-        "additionalProperties": false,
         "properties": {
           "address": {
             "$ref": "#/components/schemas/Address"
@@ -2491,7 +2577,6 @@
         "type": "object"
       },
       "VersionedDataRecord": {
-        "additionalProperties": false,
         "description": "Extension of `DataRecord` for resources returned from RESTful APIs.\nIncludes a schema version to ensure compatibility with evolving formats.",
         "properties": {
           "changed": {
@@ -2527,6 +2612,102 @@
     }
   },
   "paths": {
+    "/events": {
+      "get": {
+        "summary": "List all event profiles for the authenticated organizer",
+        "operationId": "listEventProfiles",
+        "tags": [
+          "Events"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of event profiles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ok"
+                      ]
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/EventProfile"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - missing organizerId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "error"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "error": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/events/{id}": {
       "get": {
         "summary": "Get event profile",
@@ -2534,9 +2715,6 @@
         "tags": [
           "Events"
         ],
-        "x-google-backend": {
-          "address": "https://${region}-${project}.cloudfunctions.net/eventsRestful"
-        },
         "parameters": [
           {
             "in": "path",
@@ -2598,9 +2776,6 @@
         "tags": [
           "Events"
         ],
-        "x-google-backend": {
-          "address": "https://${region}-${project}.cloudfunctions.net/eventsRestful"
-        },
         "description": "Retrieve a list of tickets for a specific event.",
         "parameters": [
           {
@@ -2697,7 +2872,6 @@
                 "properties": {
                   "contextId": {
                     "type": "string",
-                    "description": "Context entity ID (e.g., evt_xxx, org_xxx)",
                     "example": "evt_abc123"
                   },
                   "userAgent": {
@@ -2706,7 +2880,13 @@
                   },
                   "referrer": {
                     "type": "string",
-                    "example": "https://example.com/checkout"
+                    "example": "https://example.com"
+                  },
+                  "ipAddresses": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
                   }
                 }
               }
@@ -2715,7 +2895,7 @@
         },
         "responses": {
           "200": {
-            "description": "A new cart session was created",
+            "description": "Cart session started",
             "content": {
               "application/json": {
                 "schema": {
@@ -2724,8 +2904,172 @@
               }
             }
           },
-          "400": {
-            "description": "Invalid input"
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/cart/sessions/{id}": {
+      "get": {
+        "summary": "Get a cart session by ID",
+        "tags": [
+          "Cart"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Cart session ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cart session found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartSession"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cart session not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a cart session",
+        "tags": [
+          "Cart"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Cart session ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatableCartSession"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cart session updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartSession"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cart session not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Cancel (soft delete) a cart session",
+        "tags": [
+          "Cart"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Cart session ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cart session cancelled"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/cart/sessions/{id}/item": {
+      "post": {
+        "summary": "Add, update, or remove an item (ticket) in a cart session",
+        "tags": [
+          "Cart"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ID of the cart session",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "offeringId",
+                  "quantity"
+                ],
+                "properties": {
+                  "offeringId": {
+                    "type": "string",
+                    "description": "The ID of the item to update",
+                    "example": "item_123abc"
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "description": "The quantity to set. Use 0 to remove the item",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cart session updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CartSession"
+                }
+              }
+            }
           },
           "500": {
             "description": "Server error"
