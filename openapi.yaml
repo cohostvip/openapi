@@ -2207,7 +2207,7 @@ components:
             specified.
           title: url
           type: string
-          x-faker: image.url
+          x-faker: image.imageUrl
         width:
           description: Width of the image in pixels.
           title: width

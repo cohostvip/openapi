@@ -2169,7 +2169,7 @@
             "description": "Primary image URL.\nThis is the default image URL to be used when no other resolution is specified.",
             "title": "url",
             "type": "string",
-            "x-faker": "image.url"
+            "x-faker": "image.imageUrl"
           },
           "width": {
             "description": "Width of the image in pixels.",
