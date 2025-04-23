@@ -130,7 +130,7 @@
           },
           "cost": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "cost",
             "type": "string"
           },
@@ -205,37 +205,37 @@
             "properties": {
               "delivery": {
                 "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-                "pattern": "^\\\\w{3},\\\\d+$",
+                "pattern": "^\\w{3},\\d+$",
                 "title": "delivery",
                 "type": "string"
               },
               "discount": {
                 "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-                "pattern": "^\\\\w{3},\\\\d+$",
+                "pattern": "^\\w{3},\\d+$",
                 "title": "discount",
                 "type": "string"
               },
               "fee": {
                 "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-                "pattern": "^\\\\w{3},\\\\d+$",
+                "pattern": "^\\w{3},\\d+$",
                 "title": "fee",
                 "type": "string"
               },
               "subtotal": {
                 "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-                "pattern": "^\\\\w{3},\\\\d+$",
+                "pattern": "^\\w{3},\\d+$",
                 "title": "subtotal",
                 "type": "string"
               },
               "tax": {
                 "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-                "pattern": "^\\\\w{3},\\\\d+$",
+                "pattern": "^\\w{3},\\d+$",
                 "title": "tax",
                 "type": "string"
               },
               "total": {
                 "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-                "pattern": "^\\\\w{3},\\\\d+$",
+                "pattern": "^\\w{3},\\d+$",
                 "title": "total",
                 "type": "string"
               }
@@ -375,25 +375,25 @@
         "properties": {
           "cost": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "cost",
             "type": "string"
           },
           "delivery": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "delivery",
             "type": "string"
           },
           "fee": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "fee",
             "type": "string"
           },
           "tax": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "tax",
             "type": "string"
           }
@@ -760,7 +760,7 @@
       },
       "CurrencyAmount": {
         "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-        "pattern": "^\\\\w{3},\\\\d+$",
+        "pattern": "^\\w{3},\\d+$",
         "type": "string"
       },
       "Customer": {
@@ -1283,8 +1283,15 @@
       "Offering": {
         "properties": {
           "capacity": {
+            "description": "The maximum number of tickets that can be sold for this offering.",
             "title": "capacity",
-            "type": "number"
+            "type": "number",
+            "x-faker": {
+              "datatype.number": {
+                "max": 100,
+                "min": 10
+              }
+            }
           },
           "changed": {
             "description": "ISO 8601 timestamp indicating when the record was last updated, if applicable.",
@@ -1294,14 +1301,6 @@
           "constraints": {
             "description": "Any constraints that apply to this offering.\nit can be time limit, quantity limit, etc...",
             "title": "constraints"
-          },
-          "costComponents": {
-            "description": "Describe fees and other costs associated with purchasing tickets\nto this offering\n\n--@schema array(z.any()).optional()",
-            "items": {
-              "$ref": "#/components/schemas/CostComponent"
-            },
-            "title": "costComponents",
-            "type": "array"
           },
           "costs": {
             "$ref": "#/components/schemas/OfferingCosts"
@@ -1325,28 +1324,47 @@
             "type": "string"
           },
           "included": {
+            "description": "Items, products ,and vouchers included in this offering.",
             "items": {
               "$ref": "#/components/schemas/PackageInclude"
             },
             "title": "included",
-            "type": "array"
+            "type": "array",
+            "x-faker": {
+              "array.length": 0
+            }
           },
           "instructions": {
             "title": "instructions",
             "type": "string"
           },
           "maximumQuantity": {
+            "description": "Maximum number of tickets that can be purchased in a single order.",
             "title": "maximumQuantity",
-            "type": "number"
+            "type": "number",
+            "x-faker": {
+              "datatype.number": {
+                "max": 15,
+                "min": 4
+              }
+            }
           },
           "minimumQuantity": {
+            "description": "Minimum number of tickets that can be purchased in a single order.",
             "title": "minimumQuantity",
-            "type": "number"
+            "type": "number",
+            "x-faker": {
+              "datatype.number": {
+                "max": 4,
+                "min": 1
+              }
+            }
           },
           "name": {
             "description": "Offering name, can be ticket name, vaucher name, etc...",
             "title": "name",
-            "type": "string"
+            "type": "string",
+            "x-faker": "commerce.productName"
           },
           "order_confirmation_message": {
             "title": "order_confirmation_message",
@@ -1362,9 +1380,6 @@
           "quantitySold": {
             "title": "quantitySold",
             "type": "number"
-          },
-          "schedule": {
-            "$ref": "#/components/schemas/Schedule"
           },
           "sorting": {
             "title": "sorting",
@@ -1400,37 +1415,43 @@
         "properties": {
           "cost": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "cost",
             "type": "string"
           },
           "delivery": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "delivery",
             "type": "string"
           },
           "fee": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "fee",
             "type": "string"
           },
           "gross": {
             "description": "cost + fee - discount , not including tax",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "gross",
-            "type": "string"
+            "type": "string",
+            "x-faker": {
+              "random.arrayElement": [
+                "\"USD,100000\"",
+                "\"USD,25000\""
+              ]
+            }
           },
           "tax": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "tax",
             "type": "string"
           },
           "total": {
             "description": "total cost including tax",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "total",
             "type": "string"
           }
@@ -1674,49 +1695,49 @@
         "properties": {
           "delivery": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "delivery",
             "type": "string"
           },
           "discount": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "discount",
             "type": "string"
           },
           "fee": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "fee",
             "type": "string"
           },
           "gross": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "gross",
             "type": "string"
           },
           "preDiscount": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "preDiscount",
             "type": "string"
           },
           "subtotal": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "subtotal",
             "type": "string"
           },
           "tax": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "tax",
             "type": "string"
           },
           "total": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "total",
             "type": "string"
           }
@@ -1798,55 +1819,61 @@
         "properties": {
           "cost": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "cost",
             "type": "string"
           },
           "delivery": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "delivery",
             "type": "string"
           },
           "discount": {
             "description": "Total discount amount applied to this item.",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "discount",
             "type": "string"
           },
           "fee": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "fee",
             "type": "string"
           },
           "gross": {
             "description": "cost + fee - discount , not including tax",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "gross",
-            "type": "string"
+            "type": "string",
+            "x-faker": {
+              "random.arrayElement": [
+                "\"USD,100000\"",
+                "\"USD,25000\""
+              ]
+            }
           },
           "preDiscount": {
             "description": "Total price before discounts.\nEqual to subtotal + fee, before subtracting discount.",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "preDiscount",
             "type": "string"
           },
           "subtotal": {
             "description": "Total cost of tickets before taxes, fees, and discounts.",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "subtotal",
             "type": "string"
           },
           "tax": {
             "description": "A string representing a currency amount in the format `\"USD,1000\"` where:\n- `\"USD\"` is the 3-letter ISO currency code.\n- The number after the comma represents the value in **minor units** (e.g., cents for USD).\n\nFor example, `\"USD,1000\"` equals $10.00 (i.e., 1000 cents).",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "tax",
             "type": "string"
           },
           "total": {
             "description": "total cost including tax",
-            "pattern": "^\\\\w{3},\\\\d+$",
+            "pattern": "^\\w{3},\\d+$",
             "title": "total",
             "type": "string"
           }
@@ -1878,7 +1905,8 @@
           "name": {
             "description": "Offering name, can be ticket name, vaucher name, etc...",
             "title": "name",
-            "type": "string"
+            "type": "string",
+            "x-faker": "commerce.productName"
           },
           "type": {
             "$ref": "#/components/schemas/OfferingType"
@@ -2292,8 +2320,15 @@
       "Ticket": {
         "properties": {
           "capacity": {
+            "description": "The maximum number of tickets that can be sold for this offering.",
             "title": "capacity",
-            "type": "number"
+            "type": "number",
+            "x-faker": {
+              "datatype.number": {
+                "max": 100,
+                "min": 10
+              }
+            }
           },
           "category": {
             "title": "category",
@@ -2303,14 +2338,6 @@
             "description": "ISO 8601 timestamp indicating when the record was last updated, if applicable.",
             "title": "changed",
             "type": "string"
-          },
-          "costComponents": {
-            "description": "Describe fees and other costs associated with purchasing tickets\nto this offering\n\n--@schema array(z.any()).optional()",
-            "items": {
-              "$ref": "#/components/schemas/CostComponent"
-            },
-            "title": "costComponents",
-            "type": "array"
           },
           "costs": {
             "$ref": "#/components/schemas/OfferingCosts"
@@ -2334,28 +2361,47 @@
             "type": "string"
           },
           "included": {
+            "description": "Items, products ,and vouchers included in this offering.",
             "items": {
               "$ref": "#/components/schemas/PackageInclude"
             },
             "title": "included",
-            "type": "array"
+            "type": "array",
+            "x-faker": {
+              "array.length": 0
+            }
           },
           "instructions": {
             "title": "instructions",
             "type": "string"
           },
           "maximumQuantity": {
+            "description": "Maximum number of tickets that can be purchased in a single order.",
             "title": "maximumQuantity",
-            "type": "number"
+            "type": "number",
+            "x-faker": {
+              "datatype.number": {
+                "max": 15,
+                "min": 4
+              }
+            }
           },
           "minimumQuantity": {
+            "description": "Minimum number of tickets that can be purchased in a single order.",
             "title": "minimumQuantity",
-            "type": "number"
+            "type": "number",
+            "x-faker": {
+              "datatype.number": {
+                "max": 4,
+                "min": 1
+              }
+            }
           },
           "name": {
             "description": "Offering name, can be ticket name, vaucher name, etc...",
             "title": "name",
-            "type": "string"
+            "type": "string",
+            "x-faker": "commerce.productName"
           },
           "order_confirmation_message": {
             "title": "order_confirmation_message",
@@ -2387,9 +2433,6 @@
           "salesStart": {
             "title": "salesStart",
             "type": "string"
-          },
-          "schedule": {
-            "$ref": "#/components/schemas/Schedule"
           },
           "sorting": {
             "title": "sorting",
