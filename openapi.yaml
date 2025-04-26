@@ -392,61 +392,25 @@ components:
       properties:
         cost:
           description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
+            The base value of the cost. This is the value before any operations
+            are applied.
 
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+            in OrderItem this is the cost of a single item.
           pattern: ^\w{3},\d+$
           title: cost
           type: string
         delivery:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Delivery fee for a single item.
           pattern: ^\w{3},\d+$
           title: delivery
           type: string
         fee:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Fee per item.
           pattern: ^\w{3},\d+$
           title: fee
           type: string
         tax:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Total discount amount applied to this item.
           pattern: ^\w{3},\d+$
           title: tax
           type: string
@@ -1370,51 +1334,28 @@ components:
       properties:
         cost:
           description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
+            The base value of the cost. This is the value before any operations
+            are applied.
 
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+            in OrderItem this is the cost of a single item.
           pattern: ^\w{3},\d+$
           title: cost
           type: string
         delivery:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Delivery fee for a single item.
           pattern: ^\w{3},\d+$
           title: delivery
           type: string
         fee:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Fee per item.
           pattern: ^\w{3},\d+$
           title: fee
           type: string
         gross:
-          description: cost + fee - discount , not including tax
+          description: |-
+            cost + fee - discount , not including tax
+
+            In an order item, this is the gross cost of a single item.
           pattern: ^\w{3},\d+$
           title: gross
           type: string
@@ -1423,22 +1364,15 @@ components:
               - '"USD,100000"'
               - '"USD,25000"'
         tax:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Total discount amount applied to this item.
           pattern: ^\w{3},\d+$
           title: tax
           type: string
         total:
-          description: total cost including tax
+          description: |-
+            total cost including tax
+
+            In an order item, this is the total cost * Quantity.
           pattern: ^\w{3},\d+$
           title: total
           type: string
@@ -1867,31 +1801,15 @@ components:
       properties:
         cost:
           description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
+            The base value of the cost. This is the value before any operations
+            are applied.
 
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+            in OrderItem this is the cost of a single item.
           pattern: ^\w{3},\d+$
           title: cost
           type: string
         delivery:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Delivery fee for a single item.
           pattern: ^\w{3},\d+$
           title: delivery
           type: string
@@ -1901,22 +1819,15 @@ components:
           title: discount
           type: string
         fee:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Fee per item.
           pattern: ^\w{3},\d+$
           title: fee
           type: string
         gross:
-          description: cost + fee - discount , not including tax
+          description: |-
+            cost + fee - discount , not including tax
+
+            In an order item, this is the gross cost of a single item.
           pattern: ^\w{3},\d+$
           title: gross
           type: string
@@ -1937,22 +1848,15 @@ components:
           title: subtotal
           type: string
         tax:
-          description: >-
-            A string representing a currency amount in the format `"USD,1000"`
-            where:
-
-            - `"USD"` is the 3-letter ISO currency code.
-
-            - The number after the comma represents the value in **minor units**
-            (e.g., cents for USD).
-
-
-            For example, `"USD,1000"` equals $10.00 (i.e., 1000 cents).
+          description: Total discount amount applied to this item.
           pattern: ^\w{3},\d+$
           title: tax
           type: string
         total:
-          description: total cost including tax
+          description: |-
+            total cost including tax
+
+            In an order item, this is the total cost * Quantity.
           pattern: ^\w{3},\d+$
           title: total
           type: string
