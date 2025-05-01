@@ -191,8 +191,12 @@
             "title": "changed",
             "type": "string"
           },
+          "companyId": {
+            "title": "companyId",
+            "type": "string"
+          },
           "context": {
-            "$ref": "#/components/schemas/Partial<OrderContext>"
+            "$ref": "#/components/schemas/Partial<OrderContext$1>"
           },
           "contextId": {
             "description": "Namespaced identifier indicating what the order is associated with.\nFormat: \"{type}_{id}\", where type is \"evt\", \"ven\", or \"org\".",
@@ -292,7 +296,7 @@
           },
           "meta": {
             "additionalProperties": {},
-            "description": "Internal metadata, flags, debug hints, or experimental context.",
+            "description": "Internal or computed metadata associated with the order.\nMay include fulfillment flags, debugging info, or derived calculations.",
             "properties": {
               "priceLock": {
                 "description": "Snapshot of when pricing was calculated and locked.\nUseful for honoring totals during a grace window.",
@@ -319,6 +323,14 @@
             "title": "meta",
             "type": "object"
           },
+          "orderId": {
+            "title": "orderId",
+            "type": "string"
+          },
+          "organizerId": {
+            "title": "organizerId",
+            "type": "string"
+          },
           "paymentIntentClientSecret": {
             "description": "Stripe PaymentIntent client secret, used by frontend (e.g. Stripe.js).\nRequired for completing the payment flow.",
             "title": "paymentIntentClientSecret",
@@ -327,6 +339,16 @@
           "paymentIntentId": {
             "description": "Stripe PaymentIntent ID linked to this cart, if created.\nUsed for confirming payment on the backend.",
             "title": "paymentIntentId",
+            "type": "string"
+          },
+          "paymentStatus": {
+            "enum": [
+              "confirmed",
+              "failed",
+              "pending",
+              "refunded"
+            ],
+            "title": "paymentStatus",
             "type": "string"
           },
           "status": {
@@ -352,6 +374,7 @@
           }
         },
         "required": [
+          "companyId",
           "context",
           "contextId",
           "created",
@@ -359,6 +382,8 @@
           "id",
           "items",
           "meta",
+          "organizerId",
+          "paymentStatus",
           "status",
           "uid",
           "version"
@@ -1599,12 +1624,41 @@
             "type": "array"
           },
           "meta": {
+            "additionalProperties": {},
             "description": "Internal or computed metadata associated with the order.\nMay include fulfillment flags, debugging info, or derived calculations.",
-            "title": "meta"
+            "properties": {
+              "priceLock": {
+                "description": "Snapshot of when pricing was calculated and locked.\nUseful for honoring totals during a grace window.",
+                "properties": {
+                  "lockedAt": {
+                    "title": "lockedAt",
+                    "type": "string"
+                  },
+                  "ttl": {
+                    "title": "ttl",
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "lockedAt"
+                ],
+                "title": "priceLock",
+                "type": "object"
+              },
+              "resolvedContext": {
+                "$ref": "#/components/schemas/ResolvedCartContext"
+              }
+            },
+            "title": "meta",
+            "type": "object"
           },
           "orderNumber": {
             "description": "Human-readable order number for customer reference.\nOften used in emails and receipts.",
             "title": "orderNumber",
+            "type": "string"
+          },
+          "organizerId": {
+            "title": "organizerId",
             "type": "string"
           },
           "status": {
@@ -1632,6 +1686,7 @@
           "items",
           "meta",
           "orderNumber",
+          "organizerId",
           "status",
           "version"
         ],
@@ -1639,8 +1694,52 @@
         "type": "object"
       },
       "OrderContext": {
+        "anyOf": [
+          {
+            "properties": {
+              "event": {
+                "$ref": "#/components/schemas/EventProfile"
+              },
+              "type": {
+                "const": "event",
+                "title": "type",
+                "type": "string"
+              },
+              "venue": {
+                "$ref": "#/components/schemas/Venue"
+              }
+            },
+            "required": [
+              "event",
+              "type"
+            ],
+            "type": "object"
+          },
+          {
+            "properties": {
+              "event": {
+                "$ref": "#/components/schemas/EventProfile"
+              },
+              "type": {
+                "const": "venue",
+                "title": "type",
+                "type": "string"
+              },
+              "venue": {
+                "$ref": "#/components/schemas/Venue"
+              }
+            },
+            "required": [
+              "type",
+              "venue"
+            ],
+            "type": "object"
+          }
+        ],
+        "title": "OrderContext"
+      },
+      "OrderContext$1": {
         "additionalProperties": {},
-        "description": "Captures metadata and request/session context at the time the cart is created.\nSupports fraud detection, attribution, analytics, and partner session tracking.\n\nThis interface is extensible — additional custom fields may be included as needed.",
         "properties": {
           "cartSessionId": {
             "description": "The unique cart session ID assigned at the time the cart was created.\nHelps track cart attribution across systems.",
@@ -1688,7 +1787,7 @@
           "uid",
           "userAgent"
         ],
-        "title": "OrderContext",
+        "title": "OrderContext$1",
         "type": "object"
       },
       "OrderCosts": {
@@ -2015,7 +2114,7 @@
         "title": "Partial<Customer>",
         "type": "object"
       },
-      "Partial<OrderContext>": {
+      "Partial<OrderContext$1>": {
         "properties": {
           "cartSessionId": {
             "description": "The unique cart session ID assigned at the time the cart was created.\nHelps track cart attribution across systems.",
@@ -2056,7 +2155,7 @@
             "type": "string"
           }
         },
-        "title": "Partial<OrderContext>",
+        "title": "Partial<OrderContext$1>",
         "type": "object"
       },
       "Partial<OrderItem>": {
@@ -2569,6 +2668,119 @@
         "title": "VCDataRecord",
         "type": "object"
       },
+      "Venue": {
+        "additionalProperties": {},
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "capacity": {
+            "title": "capacity",
+            "type": "number"
+          },
+          "claimed": {
+            "title": "claimed",
+            "type": "boolean"
+          },
+          "description": {
+            "$ref": "#/components/schemas/MultipartText"
+          },
+          "formattedAddress": {
+            "title": "formattedAddress",
+            "type": "string"
+          },
+          "hoursOfOperation": {
+            "items": {
+              "type": "string"
+            },
+            "title": "hoursOfOperation",
+            "type": "array"
+          },
+          "id": {
+            "title": "id",
+            "type": "string"
+          },
+          "logo": {
+            "$ref": "#/components/schemas/Photo"
+          },
+          "name": {
+            "title": "name",
+            "type": "string"
+          },
+          "phoneNumber": {
+            "title": "phoneNumber",
+            "type": "string"
+          },
+          "photos": {
+            "items": {
+              "$ref": "#/components/schemas/Photo"
+            },
+            "title": "photos",
+            "type": "array"
+          },
+          "placeId": {
+            "title": "placeId",
+            "type": "string"
+          },
+          "priceLevel": {
+            "title": "priceLevel",
+            "type": "number"
+          },
+          "public": {
+            "title": "public",
+            "type": "boolean"
+          },
+          "rating": {
+            "properties": {
+              "google": {
+                "title": "google",
+                "type": "number"
+              }
+            },
+            "required": [
+              "google"
+            ],
+            "title": "rating",
+            "type": "object"
+          },
+          "refId": {
+            "title": "refId",
+            "type": "string"
+          },
+          "slug": {
+            "title": "slug",
+            "type": "string"
+          },
+          "types": {
+            "items": {
+              "type": "string"
+            },
+            "title": "types",
+            "type": "array"
+          },
+          "tz": {
+            "title": "tz",
+            "type": "string"
+          }
+        },
+        "required": [
+          "address",
+          "claimed",
+          "formattedAddress",
+          "hoursOfOperation",
+          "id",
+          "logo",
+          "name",
+          "priceLevel",
+          "public",
+          "rating",
+          "slug",
+          "types",
+          "tz"
+        ],
+        "title": "Venue",
+        "type": "object"
+      },
       "VenueBase": {
         "properties": {
           "address": {
@@ -2655,6 +2867,40 @@
     }
   },
   "paths": {
+    "/orders/{id}": {
+      "get": {
+        "summary": "Get full order details for display",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ID of the order",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order details retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to fetch order details"
+          }
+        }
+      }
+    },
     "/events": {
       "get": {
         "summary": "List all event profiles for the authenticated organizer",
@@ -3116,6 +3362,50 @@
           },
           "500": {
             "description": "Server error"
+          }
+        }
+      }
+    },
+    "/cart/sessions/{id}/place-order": {
+      "post": {
+        "summary": "Finalize the cart session and place the order",
+        "tags": [
+          "Cart"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The ID of the cart session to complete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "redirUri": {
+                      "type": "string",
+                      "example": "/oc/user123/order456"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid cart session or order could not be completed"
           }
         }
       }
