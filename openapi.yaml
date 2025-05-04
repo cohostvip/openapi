@@ -59,6 +59,68 @@ components:
     ApiVersion:
       const: '2025-04-15'
       type: string
+    Attendee3:
+      properties:
+        barcodes:
+          items:
+            type: string
+          title: barcodes
+          type: array
+        changed:
+          description: >-
+            ISO 8601 timestamp indicating when the record was last updated, if
+            applicable.
+          title: changed
+          type: string
+        checkedIn:
+          title: checkedIn
+          type: boolean
+        created:
+          description: ISO 8601 timestamp indicating when the record was created.
+          title: created
+          type: string
+        id:
+          description: Unique identifier for the record.
+          title: id
+          type: string
+        index:
+          title: index
+          type: number
+        offeringId:
+          description: For event it will be the ticket's id
+          title: offeringId
+          type: string
+        offeringSnapshot:
+          $ref: '#/components/schemas/Partial<Offering>'
+        orderId:
+          description: Order ID, from /orders/:orderId
+          title: orderId
+          type: string
+        profile:
+          $ref: '#/components/schemas/Customer'
+        status:
+          title: status
+          type: string
+        version:
+          const: '2025-04-15'
+          title: version
+          type: string
+      required:
+        - barcodes
+        - checkedIn
+        - created
+        - id
+        - index
+        - offeringId
+        - offeringSnapshot
+        - orderId
+        - profile
+        - status
+        - version
+      title: Attendee3
+      type: object
+    AttendeeStatus:
+      type: string
     BuzzBuilder:
       properties:
         countLabel:
@@ -890,8 +952,18 @@ components:
       type: string
     EventBase:
       properties:
+        changed:
+          description: >-
+            ISO 8601 timestamp indicating when the record was last updated, if
+            applicable.
+          title: changed
+          type: string
         companyId:
           title: companyId
+          type: string
+        created:
+          description: ISO 8601 timestamp indicating when the record was created.
+          title: created
           type: string
         currency:
           description: Curerncy used for the event.
@@ -904,6 +976,7 @@ components:
         flyer:
           $ref: '#/components/schemas/Photo'
         id:
+          description: Unique identifier for the record.
           title: id
           type: string
         isSeries:
@@ -915,6 +988,9 @@ components:
           title: name
           type: string
           x-faker: name.firstName
+        organizerId:
+          title: organizerId
+          type: string
         public:
           description: Is the event public?
           title: public
@@ -936,10 +1012,12 @@ components:
           $ref: '#/components/schemas/VenueBase'
       required:
         - companyId
+        - created
         - currency
         - end
         - id
         - name
+        - organizerId
         - public
         - start
         - status
@@ -1003,6 +1081,12 @@ components:
       properties:
         buzzBuilder:
           $ref: '#/components/schemas/BuzzBuilder'
+        changed:
+          description: >-
+            ISO 8601 timestamp indicating when the record was last updated, if
+            applicable.
+          title: changed
+          type: string
         channels:
           items:
             type: string
@@ -1010,6 +1094,10 @@ components:
           type: array
         companyId:
           title: companyId
+          type: string
+        created:
+          description: ISO 8601 timestamp indicating when the record was created.
+          title: created
           type: string
         currency:
           description: Curerncy used for the event.
@@ -1024,6 +1112,7 @@ components:
         flyer:
           $ref: '#/components/schemas/Photo'
         id:
+          description: Unique identifier for the record.
           title: id
           type: string
         isSeries:
@@ -1039,6 +1128,9 @@ components:
           x-faker: name.firstName
         organizer:
           title: organizer
+        organizerId:
+          title: organizerId
+          type: string
         priceRange:
           properties:
             max:
@@ -1102,12 +1194,14 @@ components:
       required:
         - channels
         - companyId
+        - created
         - currency
         - description
         - end
         - id
         - name
         - organizer
+        - organizerId
         - public
         - searchTags
         - sections
@@ -1995,6 +2089,78 @@ components:
         - type
       title: PackageInclude
       type: object
+    PaginatedRequest:
+      $ref: '#/components/schemas/PaginatedRequest<T>'
+    PaginatedRequest<T>:
+      allOf:
+        - $ref: '#/components/schemas/T_1'
+        - properties:
+            pagination:
+              $ref: '#/components/schemas/Pagination'
+          required:
+            - pagination
+          type: object
+      description: A request structure that includes both query parameters and pagination.
+      ignore: ''
+      title: PaginatedRequest<T>
+    PaginatedResponse:
+      properties:
+        pagination:
+          $ref: '#/components/schemas/PaginationResponse'
+        results:
+          description: Array of results.
+          items:
+            $ref: '#/components/schemas/T'
+          title: results
+          type: array
+      required:
+        - pagination
+        - results
+      type: object
+    Pagination:
+      description: Pagination parameters for a paginated API request.
+      properties:
+        continuation:
+          description: Continuation
+          title: continuation
+          type: string
+        page:
+          description: Page number (starting from 1).
+          title: page
+          type: number
+        size:
+          description: Number of results per page.
+          title: size
+          type: number
+      required:
+        - page
+        - size
+      title: Pagination
+      type: object
+    PaginationResponse:
+      properties:
+        continuation:
+          description: Continuation
+          title: continuation
+          type: string
+        page:
+          description: Page number (starting from 1).
+          title: page
+          type: number
+        size:
+          description: Number of results per page.
+          title: size
+          type: number
+        total:
+          description: Total number of results available.
+          title: total
+          type: number
+      required:
+        - page
+        - size
+        - total
+      title: PaginationResponse
+      type: object
     Partial<Customer>:
       properties:
         age:
@@ -2031,6 +2197,95 @@ components:
           title: uid
           type: string
       title: Partial<Customer>
+      type: object
+    Partial<Offering>:
+      properties:
+        capacity:
+          description: The maximum number of tickets that can be sold for this offering.
+          title: capacity
+          type: number
+          x-faker:
+            datatype.number:
+              max: 100
+              min: 10
+        changed:
+          description: >-
+            ISO 8601 timestamp indicating when the record was last updated, if
+            applicable.
+          title: changed
+          type: string
+        constraints:
+          description: |-
+            Any constraints that apply to this offering.
+            it can be time limit, quantity limit, etc...
+          title: constraints
+        costs:
+          $ref: '#/components/schemas/OfferingCosts'
+        created:
+          description: ISO 8601 timestamp indicating when the record was created.
+          title: created
+          type: string
+        description:
+          title: description
+          type: string
+        hidden:
+          title: hidden
+          type: boolean
+        id:
+          description: Unique identifier for the record.
+          title: id
+          type: string
+        included:
+          description: Items, products ,and vouchers included in this offering.
+          items:
+            $ref: '#/components/schemas/PackageInclude'
+          title: included
+          type: array
+          x-faker:
+            array.length: 0
+        instructions:
+          title: instructions
+          type: string
+        maximumQuantity:
+          description: Maximum number of tickets that can be purchased in a single order.
+          title: maximumQuantity
+          type: number
+          x-faker:
+            datatype.number:
+              max: 15
+              min: 4
+        minimumQuantity:
+          description: Minimum number of tickets that can be purchased in a single order.
+          title: minimumQuantity
+          type: number
+          x-faker:
+            datatype.number:
+              max: 4
+              min: 1
+        name:
+          description: Offering name, can be ticket name, vaucher name, etc...
+          title: name
+          type: string
+          x-faker: commerce.productName
+        order_confirmation_message:
+          title: order_confirmation_message
+          type: string
+        package:
+          title: package
+          type: boolean
+        priceCategory:
+          $ref: '#/components/schemas/PriceCategory'
+        quantitySold:
+          title: quantitySold
+          type: number
+        sorting:
+          title: sorting
+          type: number
+        status:
+          $ref: '#/components/schemas/OfferingStatus'
+        type:
+          $ref: '#/components/schemas/OfferingType'
+      title: Partial<Offering>
       type: object
     Partial<OrderContext$1>:
       properties:
@@ -2227,6 +2482,12 @@ components:
 
         Typically stored in `cart.meta.resolvedContext`.
       properties:
+        end:
+          description: |-
+            Optional end date or time of the event or context entity.
+            Useful for events with a specific duration or schedule.
+          title: end
+          type: string
         id:
           description: |-
             Unique identifier of the context entity.
@@ -2239,6 +2500,12 @@ components:
           $ref: '#/components/schemas/Photo'
         offerings:
           $ref: '#/components/schemas/Record<string,ResolvedCartContextOffering>'
+        start:
+          description: |-
+            Optional description or summary of the context entity.
+            Provides additional information to the customer during checkout.
+          title: start
+          type: string
         title:
           description: |-
             Human-readable title or name of the context entity.
@@ -2247,6 +2514,7 @@ components:
           type: string
       required:
         - id
+        - start
         - title
       title: ResolvedCartContext
       type: object
@@ -2295,6 +2563,12 @@ components:
         - end
         - start
       title: Schedule
+      type: object
+    T:
+      title: T
+      type: object
+    T_1:
+      title: T_1
       type: object
     Ticket:
       properties:
