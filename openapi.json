@@ -1459,12 +1459,12 @@
             "title": "id",
             "type": "string"
           },
-          "included": {
+          "includes": {
             "description": "Items, products ,and vouchers included in this offering.",
             "items": {
               "$ref": "#/components/schemas/PackageInclude"
             },
-            "title": "included",
+            "title": "includes",
             "type": "array",
             "x-faker": {
               "array.length": 0
@@ -2112,6 +2112,17 @@
             "title": "docPath",
             "type": "string"
           },
+          "includes": {
+            "description": "Items, products ,and vouchers included in this offering.",
+            "items": {
+              "$ref": "#/components/schemas/PackageInclude"
+            },
+            "title": "includes",
+            "type": "array",
+            "x-faker": {
+              "array.length": 0
+            }
+          },
           "name": {
             "description": "Offering name, can be ticket name, vaucher name, etc...",
             "title": "name",
@@ -2159,8 +2170,10 @@
             "title": "quantity",
             "type": "number"
           },
-          "ref": {
-            "title": "ref"
+          "refPath": {
+            "description": "path to the offering doc in the db.",
+            "title": "refPath",
+            "type": "string"
           },
           "type": {
             "$ref": "#/components/schemas/OfferingType"
@@ -2369,12 +2382,12 @@
             "title": "id",
             "type": "string"
           },
-          "included": {
+          "includes": {
             "description": "Items, products ,and vouchers included in this offering.",
             "items": {
               "$ref": "#/components/schemas/PackageInclude"
             },
-            "title": "included",
+            "title": "includes",
             "type": "array",
             "x-faker": {
               "array.length": 0
@@ -2805,12 +2818,12 @@
             "title": "id",
             "type": "string"
           },
-          "included": {
+          "includes": {
             "description": "Items, products ,and vouchers included in this offering.",
             "items": {
               "$ref": "#/components/schemas/PackageInclude"
             },
-            "title": "included",
+            "title": "includes",
             "type": "array",
             "x-faker": {
               "array.length": 0
@@ -3213,6 +3226,112 @@
     }
   },
   "paths": {
+    "/orders": {
+      "get": {
+        "summary": "List orders for the authenticated user or context",
+        "tags": [
+          "Orders"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Filter orders by status"
+          },
+          {
+            "in": "query",
+            "name": "startDate",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "required": false,
+            "description": "Filter orders created after this date (YYYY-MM-DD)"
+          },
+          {
+            "in": "query",
+            "name": "endDate",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "required": false,
+            "description": "Filter orders created before this date (YYYY-MM-DD)"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "Number of orders per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders list retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "orderNumber": {
+                            "type": "string"
+                          },
+                          "currency": {
+                            "type": "string"
+                          },
+                          "organizerId": {
+                            "type": "string"
+                          },
+                          "costs": {
+                            "$ref": "#/components/schemas/OrderCosts"
+                          },
+                          "customer": {
+                            "$ref": "#/components/schemas/Customer"
+                          },
+                          "status": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to fetch order list"
+          }
+        }
+      }
+    },
     "/orders/{id}": {
       "get": {
         "summary": "Get full order details for display",
