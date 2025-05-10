@@ -2041,6 +2041,10 @@ components:
           description: doc assicated with this offering in the DB.
           title: docPath
           type: string
+        id:
+          description: Unique identifier for the record.
+          title: id
+          type: string
         includes:
           description: Items, products ,and vouchers included in this offering.
           items:
@@ -2057,8 +2061,8 @@ components:
         type:
           $ref: '#/components/schemas/OfferingType'
       required:
-        - costs
         - docPath
+        - id
         - name
         - type
       title: OrderItemOffering
@@ -3178,6 +3182,67 @@ paths:
                     example: error
                   error:
                     type: string
+  /events/{id}/find-tables:
+    get:
+      summary: Find viable table options for a specific event
+      operationId: findTables
+      tags:
+        - Events
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the event
+        - in: query
+          name: ticketId
+          required: false
+          schema:
+            type: string
+          description: Optional ticket ID to filter tables for a specific ticket
+        - in: query
+          name: size
+          required: false
+          schema:
+            type: integer
+          description: Desired group size for table matching
+      responses:
+        '200':
+          description: List of viable table options
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - data
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - ok
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ViableTableOption'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - error
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - error
+                  error:
+                    type: string
+                    example: Internal Server Error
   /cart/sessions:
     post:
       summary: Start a new cart session
