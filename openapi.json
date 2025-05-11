@@ -366,50 +366,7 @@
           "items": {
             "description": "Items the user has added to their cart.",
             "items": {
-              "properties": {
-                "costs": {
-                  "$ref": "#/components/schemas/OrderItemCosts"
-                },
-                "id": {
-                  "title": "id",
-                  "type": "string"
-                },
-                "offering": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/Offering"
-                    },
-                    {
-                      "properties": {
-                        "refPath": {
-                          "title": "refPath",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "refPath"
-                      ],
-                      "type": "object"
-                    }
-                  ],
-                  "title": "offering"
-                },
-                "offeringId": {
-                  "title": "offeringId",
-                  "type": "string"
-                },
-                "quantity": {
-                  "title": "quantity",
-                  "type": "number"
-                }
-              },
-              "required": [
-                "id",
-                "offering",
-                "offeringId",
-                "quantity"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/CartSessionItem"
             },
             "title": "items",
             "type": "array"
@@ -512,50 +469,20 @@
         "type": "object"
       },
       "CartSessionItem": {
-        "properties": {
-          "costs": {
-            "$ref": "#/components/schemas/OrderItemCosts"
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Pick<OrderItem,\"id\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\">"
           },
-          "id": {
-            "title": "id",
-            "type": "string"
-          },
-          "offering": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Offering"
-              },
-              {
-                "properties": {
-                  "refPath": {
-                    "title": "refPath",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "refPath"
-                ],
-                "type": "object"
+          {
+            "properties": {
+              "costs": {
+                "$ref": "#/components/schemas/OrderItemCosts"
               }
-            ],
-            "title": "offering"
-          },
-          "offeringId": {
-            "title": "offeringId",
-            "type": "string"
-          },
-          "quantity": {
-            "title": "quantity",
-            "type": "number"
+            },
+            "type": "object"
           }
-        },
-        "required": [
-          "id",
-          "offering",
-          "offeringId",
-          "quantity"
         ],
-        "type": "object"
+        "title": "CartSessionItem"
       },
       "ContextId": {
         "description": "A namespaced identifier representing the entity an order is associated with.\n\nMust begin with one of the following prefixes:\n- \"evt_\" for events\n- \"ven_\" for venues\n- \"org_\" for organizers",
@@ -2161,6 +2088,9 @@
           "offeringType": {
             "$ref": "#/components/schemas/OfferingType"
           },
+          "options": {
+            "title": "options"
+          },
           "quantity": {
             "description": "Quantity purchased of this item.",
             "title": "quantity",
@@ -2176,6 +2106,7 @@
           "offering",
           "offeringId",
           "offeringType",
+          "options",
           "quantity"
         ],
         "title": "OrderItem",
@@ -2264,11 +2195,6 @@
           "costs": {
             "$ref": "#/components/schemas/OfferingCosts"
           },
-          "docPath": {
-            "description": "doc assicated with this offering in the DB.",
-            "title": "docPath",
-            "type": "string"
-          },
           "id": {
             "description": "Unique identifier for the record.",
             "title": "id",
@@ -2291,14 +2217,19 @@
             "type": "string",
             "x-faker": "commerce.productName"
           },
+          "refPath": {
+            "description": "doc assicated with this offering in the DB.",
+            "title": "refPath",
+            "type": "string"
+          },
           "type": {
             "$ref": "#/components/schemas/OfferingType"
           }
         },
         "required": [
-          "docPath",
           "id",
           "name",
+          "refPath",
           "type"
         ],
         "title": "OrderItemOffering",
@@ -2773,6 +2704,40 @@
         "title": "Photo",
         "type": "object"
       },
+      "Pick<OrderItem,\"id\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\">": {
+        "properties": {
+          "id": {
+            "description": "Unique ID for this order item.",
+            "title": "id",
+            "type": "string"
+          },
+          "offering": {
+            "$ref": "#/components/schemas/OrderItemOffering"
+          },
+          "offeringId": {
+            "description": "ID of the offering purchased.",
+            "title": "offeringId",
+            "type": "string"
+          },
+          "options": {
+            "title": "options"
+          },
+          "quantity": {
+            "description": "Quantity purchased of this item.",
+            "title": "quantity",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "offering",
+          "offeringId",
+          "options",
+          "quantity"
+        ],
+        "title": "Pick<OrderItem,\"id\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\">",
+        "type": "object"
+      },
       "PriceCategory": {
         "enum": [
           "donation",
@@ -3109,50 +3074,7 @@
           "items": {
             "description": "Items the user has added to their cart.",
             "items": {
-              "properties": {
-                "costs": {
-                  "$ref": "#/components/schemas/OrderItemCosts"
-                },
-                "id": {
-                  "title": "id",
-                  "type": "string"
-                },
-                "offering": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/Offering"
-                    },
-                    {
-                      "properties": {
-                        "refPath": {
-                          "title": "refPath",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "refPath"
-                      ],
-                      "type": "object"
-                    }
-                  ],
-                  "title": "offering"
-                },
-                "offeringId": {
-                  "title": "offeringId",
-                  "type": "string"
-                },
-                "quantity": {
-                  "title": "quantity",
-                  "type": "number"
-                }
-              },
-              "required": [
-                "id",
-                "offering",
-                "offeringId",
-                "quantity"
-              ],
-              "type": "object"
+              "$ref": "#/components/schemas/CartSessionItem"
             },
             "title": "items",
             "type": "array"
