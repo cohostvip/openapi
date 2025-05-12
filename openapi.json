@@ -471,7 +471,7 @@
       "CartSessionItem": {
         "allOf": [
           {
-            "$ref": "#/components/schemas/Pick<OrderItem,\"id\"|\"details\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\">"
+            "$ref": "#/components/schemas/Pick<OrderItem,\"id\"|\"details\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\"|\"tableCommitmentId\">"
           },
           {
             "properties": {
@@ -2771,7 +2771,7 @@
         "title": "Photo",
         "type": "object"
       },
-      "Pick<OrderItem,\"id\"|\"details\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\">": {
+      "Pick<OrderItem,\"id\"|\"details\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\"|\"tableCommitmentId\">": {
         "properties": {
           "details": {
             "title": "details",
@@ -2797,6 +2797,10 @@
             "description": "Quantity purchased of this item.",
             "title": "quantity",
             "type": "number"
+          },
+          "tableCommitmentId": {
+            "title": "tableCommitmentId",
+            "type": "string"
           }
         },
         "required": [
@@ -2805,9 +2809,10 @@
           "offering",
           "offeringId",
           "options",
-          "quantity"
+          "quantity",
+          "tableCommitmentId"
         ],
-        "title": "Pick<OrderItem,\"id\"|\"details\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\">",
+        "title": "Pick<OrderItem,\"id\"|\"details\"|\"options\"|\"offeringId\"|\"quantity\"|\"offering\"|\"tableCommitmentId\">",
         "type": "object"
       },
       "PriceCategory": {

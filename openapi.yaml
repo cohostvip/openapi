@@ -462,7 +462,7 @@ components:
     CartSessionItem:
       allOf:
         - $ref: >-
-            #/components/schemas/Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering">
+            #/components/schemas/Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering"|"tableCommitmentId">
         - properties:
             costs:
               $ref: '#/components/schemas/OrderItemCosts'
@@ -2550,7 +2550,7 @@ components:
         - url
       title: Photo
       type: object
-    Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering">:
+    Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering"|"tableCommitmentId">:
       properties:
         details:
           title: details
@@ -2571,6 +2571,9 @@ components:
           description: Quantity purchased of this item.
           title: quantity
           type: number
+        tableCommitmentId:
+          title: tableCommitmentId
+          type: string
       required:
         - details
         - id
@@ -2578,8 +2581,9 @@ components:
         - offeringId
         - options
         - quantity
+        - tableCommitmentId
       title: >-
-        Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering">
+        Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering"|"tableCommitmentId">
       type: object
     PriceCategory:
       enum:
