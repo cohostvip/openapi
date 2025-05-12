@@ -462,7 +462,7 @@ components:
     CartSessionItem:
       allOf:
         - $ref: >-
-            #/components/schemas/Pick<OrderItem,"id"|"options"|"offeringId"|"quantity"|"offering">
+            #/components/schemas/Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering">
         - properties:
             costs:
               $ref: '#/components/schemas/OrderItemCosts'
@@ -1971,6 +1971,9 @@ components:
           type: array
         costs:
           $ref: '#/components/schemas/OrderItemCosts'
+        details:
+          title: details
+          type: string
         id:
           description: Unique ID for this order item.
           title: id
@@ -2002,9 +2005,34 @@ components:
           description: Quantity purchased of this item.
           title: quantity
           type: number
+        tableCommitment:
+          properties:
+            completed:
+              title: completed
+              type: boolean
+            groupSize:
+              title: groupSize
+              type: number
+            id:
+              title: id
+              type: string
+            ticketsPurchased:
+              title: ticketsPurchased
+              type: number
+          required:
+            - completed
+            - groupSize
+            - id
+            - ticketsPurchased
+          title: tableCommitment
+          type: object
+        tableCommitmentId:
+          title: tableCommitmentId
+          type: string
       required:
         - costComponents
         - costs
+        - details
         - id
         - includedWithItemId
         - meta
@@ -2013,6 +2041,7 @@ components:
         - offeringType
         - options
         - quantity
+        - tableCommitmentId
       title: OrderItem
       type: object
     OrderItemCosts:
@@ -2111,6 +2140,22 @@ components:
           type: array
           x-faker:
             array.length: 0
+        maximumQuantity:
+          description: Maximum number of tickets that can be purchased in a single order.
+          title: maximumQuantity
+          type: number
+          x-faker:
+            datatype.number:
+              max: 15
+              min: 4
+        minimumQuantity:
+          description: Minimum number of tickets that can be purchased in a single order.
+          title: minimumQuantity
+          type: number
+          x-faker:
+            datatype.number:
+              max: 4
+              min: 1
         name:
           description: Offering name, can be ticket name, vaucher name, etc...
           title: name
@@ -2124,6 +2169,8 @@ components:
           $ref: '#/components/schemas/OfferingType'
       required:
         - id
+        - maximumQuantity
+        - minimumQuantity
         - name
         - refPath
         - type
@@ -2499,8 +2546,11 @@ components:
         - url
       title: Photo
       type: object
-    Pick<OrderItem,"id"|"options"|"offeringId"|"quantity"|"offering">:
+    Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering">:
       properties:
+        details:
+          title: details
+          type: string
         id:
           description: Unique ID for this order item.
           title: id
@@ -2518,12 +2568,14 @@ components:
           title: quantity
           type: number
       required:
+        - details
         - id
         - offering
         - offeringId
         - options
         - quantity
-      title: Pick<OrderItem,"id"|"options"|"offeringId"|"quantity"|"offering">
+      title: >-
+        Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering">
       type: object
     PriceCategory:
       enum:
@@ -3383,6 +3435,40 @@ paths:
                 $ref: '#/components/schemas/CartSession'
         '500':
           description: Server error
+  /cart/sessions/{id}/join-table:
+    post:
+      summary: Join a table commitment within a cart session
+      tags:
+        - Cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the cart session
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - tableCommitmentId
+              properties:
+                tableCommitmentId:
+                  type: string
+                  description: The ID of the table commitment to join
+                  example: tbl_abc123
+      responses:
+        '200':
+          description: Successfully joined the table commitment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSession'
+        '400':
+          description: Invalid request or unable to join table
   /cart/sessions/{id}/place-order:
     post:
       summary: Finalize the cart session and place the order
