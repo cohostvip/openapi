@@ -2165,6 +2165,9 @@ components:
           description: doc assicated with this offering in the DB.
           title: refPath
           type: string
+        sorting:
+          title: sorting
+          type: number
         type:
           $ref: '#/components/schemas/OfferingType'
       required:
@@ -2173,6 +2176,7 @@ components:
         - minimumQuantity
         - name
         - refPath
+        - sorting
         - type
       title: OrderItemOffering
       type: object

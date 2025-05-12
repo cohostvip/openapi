@@ -2282,6 +2282,10 @@
             "title": "refPath",
             "type": "string"
           },
+          "sorting": {
+            "title": "sorting",
+            "type": "number"
+          },
           "type": {
             "$ref": "#/components/schemas/OfferingType"
           }
@@ -2292,6 +2296,7 @@
           "minimumQuantity",
           "name",
           "refPath",
+          "sorting",
           "type"
         ],
         "title": "OrderItemOffering",
