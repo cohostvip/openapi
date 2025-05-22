@@ -356,6 +356,9 @@ components:
           type: string
         customer:
           $ref: '#/components/schemas/Partial<Customer>'
+        customerAnswers:
+          description: Customer answers
+          title: customerAnswers
         forwarded:
           description: Partner-forwarded data (e.g. utm, session metadata).
           title: forwarded
@@ -462,10 +465,14 @@ components:
     CartSessionItem:
       allOf:
         - $ref: >-
-            #/components/schemas/Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering"|"tableCommitmentId">
+            #/components/schemas/Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"tableCommitmentId">
         - properties:
             costs:
               $ref: '#/components/schemas/OrderItemCosts'
+            offering:
+              $ref: '#/components/schemas/OrderItemOffering'
+          required:
+            - offering
           type: object
       title: CartSessionItem
     ContextId:
@@ -2128,6 +2135,9 @@ components:
       properties:
         costs:
           $ref: '#/components/schemas/OfferingCosts'
+        description:
+          title: description
+          type: string
         id:
           description: Unique identifier for the record.
           title: id
@@ -2161,6 +2171,12 @@ components:
           title: name
           type: string
           x-faker: commerce.productName
+        options:
+          description: The group this offering belongs to.
+          items:
+            $ref: '#/components/schemas/OfferingOptionsGroup'
+          title: options
+          type: array
         refPath:
           description: doc assicated with this offering in the DB.
           title: refPath
@@ -2168,6 +2184,8 @@ components:
         sorting:
           title: sorting
           type: number
+        status:
+          $ref: '#/components/schemas/OfferingStatus'
         type:
           $ref: '#/components/schemas/OfferingType'
       required:
@@ -2177,6 +2195,7 @@ components:
         - name
         - refPath
         - sorting
+        - status
         - type
       title: OrderItemOffering
       type: object
@@ -2550,7 +2569,7 @@ components:
         - url
       title: Photo
       type: object
-    Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering"|"tableCommitmentId">:
+    Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"tableCommitmentId">:
       properties:
         details:
           title: details
@@ -2559,8 +2578,6 @@ components:
           description: Unique ID for this order item.
           title: id
           type: string
-        offering:
-          $ref: '#/components/schemas/OrderItemOffering'
         offeringId:
           description: ID of the offering purchased.
           title: offeringId
@@ -2577,13 +2594,12 @@ components:
       required:
         - details
         - id
-        - offering
         - offeringId
         - options
         - quantity
         - tableCommitmentId
       title: >-
-        Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"offering"|"tableCommitmentId">
+        Pick<OrderItem,"id"|"details"|"options"|"offeringId"|"quantity"|"tableCommitmentId">
       type: object
     PriceCategory:
       enum:
@@ -2609,6 +2625,8 @@ components:
 
         Typically stored in `cart.meta.resolvedContext`.
       properties:
+        config:
+          title: config
         end:
           description: |-
             Optional end date or time of the event or context entity.
@@ -2640,6 +2658,7 @@ components:
           title: title
           type: string
       required:
+        - config
         - id
         - start
         - title
@@ -2690,6 +2709,112 @@ components:
         - end
         - start
       title: Schedule
+      type: object
+    StructuredCost:
+      properties:
+        currency:
+          title: currency
+          type: string
+        formatted:
+          title: formatted
+          type: string
+        majorValue:
+          title: majorValue
+          type: number
+        value:
+          title: value
+          type: number
+      required:
+        - currency
+        - formatted
+        - majorValue
+        - value
+      title: StructuredCost
+      type: object
+    StructuredDate:
+      description: A pre-parsed human-friendly representation of a date and time.
+      properties:
+        date:
+          description: Formatted date strings.
+          properties:
+            EEEEMMMMd:
+              description: Full format, e.g., "Tuesday, October 3".
+              title: EEEEMMMMd
+              type: string
+            EEEMMMd:
+              description: Short weekday/month/day, e.g., "Tue, Oct. 3".
+              title: EEEMMMd
+              type: string
+            long:
+              description: Long date format, e.g., "Tuesday, October 3, 2023".
+              title: long
+              type: string
+            short:
+              description: Short numeric format, e.g., "10/03/2023".
+              title: short
+              type: string
+          required:
+            - EEEEMMMMd
+            - EEEMMMd
+            - long
+            - short
+          title: date
+          type: object
+        duration:
+          description: Duration details from now to the date.
+          properties:
+            days:
+              title: days
+              type: number
+            hours:
+              title: hours
+              type: number
+            minutes:
+              title: minutes
+              type: number
+            months:
+              title: months
+              type: number
+            weeks:
+              title: weeks
+              type: number
+          required:
+            - days
+            - hours
+            - minutes
+            - months
+            - weeks
+          title: duration
+          type: object
+        local:
+          description: Local timestamp (e.g., "2006-10-25T12:00:00-04:00").
+          title: local
+          type: string
+        time:
+          description: Time string (e.g., "3:00 PM").
+          title: time
+          type: string
+        timezone:
+          description: IANA timezone (e.g., "America/New_York").
+          title: timezone
+          type: string
+        upcoming:
+          description: Whether this date is in the future.
+          title: upcoming
+          type: boolean
+        utc:
+          description: UTC timestamp (e.g., "2006-10-25T12:00:00Z").
+          title: utc
+          type: string
+      required:
+        - date
+        - duration
+        - local
+        - time
+        - timezone
+        - upcoming
+        - utc
+      title: StructuredDate
       type: object
     T:
       title: T
@@ -2860,6 +2985,12 @@ components:
       properties:
         customer:
           $ref: '#/components/schemas/Partial<Customer>'
+        customerAnswers:
+          description: Customer answers
+          title: customerAnswers
+        forwarded:
+          description: Partner-forwarded data (e.g. utm, session metadata).
+          title: forwarded
         items:
           description: Items the user has added to their cart.
           items:
@@ -3492,6 +3623,74 @@ paths:
       responses:
         '200':
           description: Order completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: ok
+                  redirUri:
+                    type: string
+                    example: /oc/user123/order456
+        '400':
+          description: Invalid cart session or order could not be completed
+  /cart/sessions/{id}/coupons:
+    post:
+      summary: Apply a coupon to the cart session
+      tags:
+        - Cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the cart session
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: The coupon code to apply
+                  example: SUMMER2023
+      responses:
+        '200':
+          description: Cart session updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CartSession'
+        '404':
+          description: Cart session not found
+        '500':
+          description: Server error
+  /cart/sessions/{id}/coupons/{couponId}:
+    delete:
+      summary: Remove a coupon from the cart session
+      tags:
+        - Cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the cart session
+          schema:
+            type: string
+        - in: path
+          name: couponId
+          required: true
+          description: The ID of the coupon to remove
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Coupon removed successfully
           content:
             application/json:
               schema:
