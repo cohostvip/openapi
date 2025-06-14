@@ -3324,6 +3324,346 @@ paths:
                 $ref: '#/components/schemas/OrderDetails'
         '500':
           description: Failed to fetch order details
+  /events/{id}/tickets:
+    get:
+      tags:
+        - Event Tickets
+      summary: Get event tickets
+      description: Retrieve all tickets for a specific event with optional status filtering
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: string
+            example: evt_123abc
+        - name: status
+          in: query
+          required: false
+          description: >-
+            Filter tickets by offering status. Can be a single status or array
+            of statuses
+          schema:
+            oneOf:
+              - type: string
+                enum:
+                  - live
+                  - draft
+                  - archived
+                  - sold_out
+              - type: array
+                items:
+                  type: string
+                  enum:
+                    - live
+                    - draft
+                    - archived
+                    - sold_out
+          examples:
+            single:
+              summary: Single status
+              value: live
+            multiple:
+              summary: Multiple statuses
+              value:
+                - live
+                - sold_out
+      responses:
+        '200':
+          description: Successfully retrieved event tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Ticket'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - Event Tickets
+      summary: Create event tickets
+      description: Create one or more tickets for a specific event
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: string
+            example: evt_123abc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - context
+              properties:
+                ticket:
+                  $ref: '#/components/schemas/PartialTicket'
+                tickets:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PartialTicket'
+                  description: >-
+                    Multiple tickets to create (use either ticket or tickets,
+                    not both)
+                context:
+                  type: object
+                  description: Additional context information for ticket creation
+                  properties:
+                    refId:
+                      type: string
+                      description: Reference ID for the ticket
+              oneOf:
+                - required:
+                    - ticket
+                - required:
+                    - tickets
+            examples:
+              single_ticket:
+                summary: Create a single ticket
+                value:
+                  ticket:
+                    name: General Admission
+                    price: 2500
+                    currency: USD
+                    quantity: 100
+                  context:
+                    refId: ticket_001
+              multiple_tickets:
+                summary: Create multiple tickets
+                value:
+                  tickets:
+                    - name: Early Bird
+                      price: 2000
+                      currency: USD
+                      quantity: 50
+                    - name: VIP
+                      price: 5000
+                      currency: USD
+                      quantity: 20
+                  context:
+                    refId: batch_001
+      responses:
+        '200':
+          description: Successfully created tickets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  data:
+                    type: object
+                    properties:
+                      ids:
+                        type: array
+                        items:
+                          type: string
+                        description: Array of created ticket IDs
+                        example:
+                          - ticket_123
+                          - ticket_456
+        '400':
+          description: Bad request - invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: error
+                message: 'Forbidden: You do not have permission to create events'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /events/{id}/tickets/{ticketId}:
+    delete:
+      tags:
+        - Event Tickets
+      summary: Delete a ticket
+      description: Delete a specific ticket from an event
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: string
+            example: evt_123abc
+        - name: ticketId
+          in: path
+          required: true
+          description: The unique identifier of the ticket to delete
+          schema:
+            type: string
+            example: ticket_123abc
+      responses:
+        '204':
+          description: Successfully deleted ticket (no content)
+        '401':
+          description: Unauthorized - authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: error
+                message: 'Forbidden: You do not have permission to delete events'
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      tags:
+        - Event Tickets
+      summary: Update a ticket
+      description: Update an existing ticket for a specific event
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the event
+          schema:
+            type: string
+            example: evt_123abc
+        - name: ticketId
+          in: path
+          required: true
+          description: The unique identifier of the ticket to update
+          schema:
+            type: string
+            example: ticket_123abc
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ticket
+                - context
+              properties:
+                ticket:
+                  $ref: '#/components/schemas/PartialTicket'
+                context:
+                  type: object
+                  description: Additional context information for ticket update
+                  properties:
+                    refId:
+                      type: string
+                      description: Reference ID for the ticket
+            example:
+              ticket:
+                name: Updated General Admission
+                price: 3000
+                quantity: 150
+              context:
+                refId: ticket_001_updated
+      responses:
+        '200':
+          description: Successfully updated ticket
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: ID of the updated ticket
+                        example: ticket_123abc
+        '400':
+          description: Bad request - ticket data is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: error
+                message: 'Bad Request: Ticket data is required'
+        '401':
+          description: Unauthorized - authentication required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                status: error
+                message: 'Forbidden: You do not have permission to update events'
+        '404':
+          description: Ticket not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /events:
     get:
       summary: List all event profiles for the authenticated organizer
@@ -3421,58 +3761,6 @@ paths:
                 properties:
                   status:
                     type: string
-                  error:
-                    type: string
-  /events/{id}/tickets:
-    get:
-      summary: Get event tickets
-      operationId: getEventTickets
-      tags:
-        - Events
-      description: Retrieve a list of tickets for a specific event.
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          description: The ID of the event
-        - in: query
-          name: status
-          required: false
-          schema:
-            oneOf:
-              - type: string
-              - type: array
-                items:
-                  type: string
-          description: Filter tickets by status (e.g., "live", "draft", etc.)
-      responses:
-        '200':
-          description: A list of tickets
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    enum:
-                      - ok
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Ticket'
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
                   error:
                     type: string
   /cart/sessions:
